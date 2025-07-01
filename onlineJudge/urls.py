@@ -22,7 +22,7 @@ from rest_framework_simplejwt.views import (
     TokenObtainPairView,
     TokenRefreshView,
 )
-from home.views import check
+# from home.views import check
 
 
 urlpatterns = [
