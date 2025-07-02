@@ -34,4 +34,6 @@ urlpatterns = [
     
     path('auth/',include('accounts.urls')),
     path('home/',include('home.urls')),
+    path('solution/',include('solution.urls')),
+    
 ]

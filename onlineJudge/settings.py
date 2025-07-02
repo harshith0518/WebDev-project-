@@ -30,6 +30,7 @@ ALLOWED_HOSTS = []
 
 # Application definition
 
+#################################################################
 INSTALLED_APPS = [
     'django.contrib.admin',
     'django.contrib.auth',
@@ -41,11 +42,10 @@ INSTALLED_APPS = [
     'accounts',
     'contest',
     'problem',
-    'testcase',
     'solution',
     'user',
     'rest_framework',
-    'rest_framework_simplejwt'
+    'rest_framework_simplejwt',
 ]
 
 REST_FRAMEWORK = {
@@ -55,6 +55,8 @@ REST_FRAMEWORK = {
 }
 
 
+LOGIN_URL = '/auth/login/'
+####################################################
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',

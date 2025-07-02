@@ -18,7 +18,7 @@
     }
     .card {
       width: 100%;
-      max-width: 600px;
+      max-width: 700px;
     }
     .alert-container {
       position: fixed;
@@ -30,28 +30,53 @@
       z-index: 2000;
     }
   </style>
+
+  <style>
+  .custom-alert-container {
+    position: fixed;
+    top: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 80%;
+    max-width: 600px;
+    z-index: 2000;
+  }
+
+  .custom-alert-box {
+    background-color: #d4edda;  /* light green */
+    color: #155724;             /* dark green text */
+    border: 1px solid #c3e6cb;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  }
+</style>
+
+
+
 </head>
 <body>
 
-  <!-- Flash messages popup -->
-  <div class="alert-container">
+
+    <div class="custom-alert-container">
     {% if messages %}
       {% for message in messages %}
-        <div
-          class="alert alert-{{ message.tags }} alert-dismissible fade show"
-          role="alert"
-        >
+        <div class="alert alert-success alert-dismissible fade show custom-alert-box" role="alert">
           {{ message }}
-          <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+          <button type="button" class="close text-dark" data-bs-dismiss="alert" aria-label="Close">
+  <span aria-hidden="true">&times;</span>
+</button>
+
         </div>
       {% endfor %}
     {% endif %}
   </div>
 
+  
+
   <div class="card shadow">
     <div class="card-body">
       <h3 class="card-title text-center mb-4">Add a New Problem</h3>
-      <form method="post" novalidate>
+      
+      <form method="post" enctype="multipart/form-data" novalidate>
         {% csrf_token %}
 
         <!-- Title -->
@@ -85,7 +110,7 @@
         <div class="mb-4">
           <label for="difficulty" class="form-label">Difficulty</label>
           <select
-            class="form-select"
+            class="form-select form-control"
             id="difficulty"
             name="difficulty"
             required
@@ -99,6 +124,43 @@
           </select>
         </div>
 
+        <!-- Public Testcases -->
+         
+        <div class="mb-4">
+          <label class="form-label"><strong>Public Testcases</strong></label>
+          <div class="mb-2">
+            <!-- <label class="form-label">Input Files</label> -->
+            <input
+              type="file"
+              name="public_inputs"
+              class="form-control"
+              accept=".txt"
+              multiple
+            />
+          </div>
+          
+          <small class="form-text text-muted">
+            <code>Upload folder having at most 3 testcase folders each containing input.txt and output.txt files.</code>
+          </small>
+        </div>
+
+        <!-- Private Testcases Folder Upload -->
+        <div class="mb-4">
+          <label class="form-label"><strong>Private Testcases Folder</strong></label>
+          <input
+            type="file"
+            name="private_testcases"
+            class="form-control"
+            webkitdirectory
+            directory
+            multiple
+          />
+          <small class="form-text text-muted">
+            <code>Upload folder containing testcase folders each containing input.txt and output.txt files.</code>
+          </small>
+        </div>
+
+        <!-- Submit -->
         <div class="d-grid">
           <button type="submit" class="btn btn-primary btn-lg">
             Submit Problem
@@ -109,5 +171,17 @@
   </div>
 
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
+  <script>
+  setTimeout(() => {
+    const alert = document.querySelector('.custom-alert-box');
+    if (alert) {
+      alert.classList.remove('show');
+    }
+  }, 3000); // 3000ms = 3 seconds
+</script>
+
+
+
 </body>
 </html>
