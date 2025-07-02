@@ -4,6 +4,7 @@ from django.http import HttpResponse
 from django.template import loader
 from problem.models import Problem
 from django.contrib.auth.decorators import login_required
+from django.shortcuts import get_object_or_404
 # Create your views here.
 
 
@@ -84,8 +85,12 @@ def problemDetails(request,problem_id):
 
 
 
+
+
 def deleteProblem(request,problem_id):
-    Problem.objects.get(id = problem_id).delete()
+    problem = get_object_or_404(Problem,id = problem_id)
+    messages.info(request,f"Problem '{problem.problemTitle}' has been deleted successfully!")
+    problem.delete()
     return redirect('problem-set')
     
     

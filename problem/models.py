@@ -27,6 +27,9 @@ class Problem(models.Model):
         return f'{self.problemTitle}'
     
     
+    def get_accuracy(self):
+        if (self.totalAccepted+self.totalRejected == 0): return '100%'
+        else: return f'{self.totalAccepted/(self.totalRejected+self.totalAccepted):.2f}%'
 
 
 
