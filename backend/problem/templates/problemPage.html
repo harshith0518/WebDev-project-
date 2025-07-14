@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>{{ problem.problemTitle }}</title>
+  <link
+    href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"
+    rel="stylesheet"/>
+  <style>
+    body {
+      background: #f8f9fa;
+      padding-top: 60px;
+    }
+
+    .problem-container {
+      max-width: 900px;
+      margin: auto;
+      padding: 30px;
+      background: white;
+      box-shadow: 0 0 10px rgba(0,0,0,0.1);
+      border-radius: 8px;
+    }
+
+    .problem-title {
+      text-align: center;
+      font-weight: bold;
+      font-size: 2rem;
+      margin-bottom: 30px;
+    }
+
+    .problem-statement {
+      font-size: 1.1rem;
+      line-height: 1.6;
+      white-space: pre-line;
+    }
+
+    .blank-space {
+      height: 200px;
+    }
+  </style>
+</head>
+<body>
+  <div class="problem-container">
+
+    <!-- Delete Button at Top Right -->
+    <div class="d-flex justify-content-end mb-3">
+      <a href="{% url 'delete-problem' problem.id %}" class="btn btn-danger">
+        🗑️ Delete Problem
+      </a>
+    </div>
+
+    <div class="problem-title">
+      {{ problem.problemTitle }}
+    </div>
+
+    <div class="problem-statement">
+      {{ problem.problemStatement }}
+    </div>
+
+    <div class="blank-space"></div>
+
+    <div class="text-center mt-4">
+      <a href="{% url 'code-solution' problem.id %}" class="btn btn-success btn-lg">
+        💻 Code It
+      </a>
+    </div>
+  </div>
+</body>
+</html>

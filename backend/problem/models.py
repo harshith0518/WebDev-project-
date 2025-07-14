@@ -1,0 +1,57 @@
+from django.db import models
+from django.conf import settings
+from django.contrib.auth import  get_user_model
+from django.contrib.auth.models import  User
+# Create your models here.
+User = get_user_model()
+
+
+class Problem(models.Model):
+    problemTitle = models.CharField(max_length = 20)
+    problemStatement = models.TextField()
+    totalAccepted = models.IntegerField(default=0)
+    totalRejected = models.IntegerField(default=0)
+    sample_testcase_INP = models.TextField(default = '')
+    sample_testcase_OUT = models.TextField(default='no constraints provided')
+    constraints = models.TextField(default='')
+    difficultyLevel = models.CharField(max_length=10)   # only accepts the Easy,Medium ,Hard strings
+    author = models.ForeignKey(
+        User,
+        on_delete=models.CASCADE,
+        null = True,    # to replace author as NULL in db if the author's account was deleted.
+        blank = True,   # to replace author as blank in the admin page.
+        related_name='authored_problems',
+    )
+    def __str__(self):
+        return f'{self.problemTitle}'
+    def get_accuracy(self):
+        if (self.totalAccepted+self.totalRejected == 0): return '100%'
+        else: return f'{self.totalAccepted/(self.totalRejected+self.totalAccepted):.2f}%'
+
+
+class Testcase(models.Model):
+    inputFile = models.FileField()
+    outputFile = models.FileField()
+    problem = models.ForeignKey(
+        Problem,
+        on_delete = models.CASCADE,
+        related_name='testcases',
+    )
+
+class Solution(models.Model):
+    code = models.FileField()
+    user = models.ForeignKey(
+        User,
+        on_delete=models.CASCADE,
+        related_name='solutions',
+    )
+    problem = models.ForeignKey(
+        Problem,
+        on_delete=models.CASCADE,
+        related_name='solutions',
+    )
+    verdict = models.CharField(max_length=30)   # --> accepted,wrong answer,memory/time limit exceeded,run time error
+    language = models.CharField(max_length = 10)  # cpp,python,java
+    
+    def __str__(self):
+        return f'solution{self.id} submitted by {self.user.username} for problem {self.problem.problemTitle}'

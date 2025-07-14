@@ -1,0 +1,6 @@
+0cfd45b5cbb24077995afe817f255a5a.cpp: In function 'int main()':
+0cfd45b5cbb24077995afe817f255a5a.cpp:7:15: error: invalid conversion from 'const char*' to 'int' [-fpermissive]
+    7 | }
+      |               ^            
+      |               |
+      |               const char*

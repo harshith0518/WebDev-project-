@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>Welcome to Mysite</title>
+        <link
+            href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"
+            rel="stylesheet" />
+        <style>
+    body {
+      background: #f8f9fa;
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .card {
+      max-width: 500px;
+      width: 100%;
+    }
+    .btn-group .btn {
+      min-width: 120px;
+    }
+  </style>
+    </head>
+    <body>
+        <div class="card shadow p-4 text-center">
+            <h1 class="mb-3">Welcome to Mysite</h1>
+            <p class="lead mb-4">
+                Solve, learn, and compete on coding problems crafted just for
+                you.
+            </p>
+
+            <div class="btn-group" role="group" aria-label="Navigation">
+                <a href="{% url 'register-user' %}"
+                    class="btn btn-outline-primary">
+                    Register
+                </a>
+                <a href="{% url 'login-user' %}"
+                    class="btn btn-outline-success">
+                    Login
+                </a>
+                
+                <a href="{% url 'problem-set' %}"
+                    class="btn btn-outline-secondary">
+                    Problemset
+                </a>
+            </div>
+        </div>
+    </body>
+</html>
+

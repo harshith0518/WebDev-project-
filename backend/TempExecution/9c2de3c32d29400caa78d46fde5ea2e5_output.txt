@@ -1,0 +1,6 @@
+9c2de3c32d29400caa78d46fde5ea2e5.cpp: In function 'int main()':
+9c2de3c32d29400caa78d46fde5ea2e5.cpp:7:15: error: invalid conversion from 'const char*' to 'int' [-fpermissive]
+    7 | }
+      |               ^            
+      |               |
+      |               const char*

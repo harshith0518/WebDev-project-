@@ -1,0 +1,7 @@
+b765950e4535491ea9a3d01c8db16880.cpp: In function 'int main()':
+b765950e4535491ea9a3d01c8db16880.cpp:9:5: error: 'cout' was not declared in this scope; did you mean 'std::cout'?
+In file included from C:/msys64/ucrt64/include/c++/14.1.0/x86_64-w64-mingw32/bits/stdc++.h:146,
+                 from b765950e4535491ea9a3d01c8db16880.cpp:3:
+C:/msys64/ucrt64/include/c++/14.1.0/iostream:63:18: note: 'std::cout' declared here
+   63 |   extern ostream cout;          ///< Linked to standard output
+      |                  ^~~~

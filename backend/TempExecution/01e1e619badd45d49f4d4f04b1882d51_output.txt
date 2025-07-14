@@ -1,0 +1,7 @@
+01e1e619badd45d49f4d4f04b1882d51.cpp: In function 'int main()':
+01e1e619badd45d49f4d4f04b1882d51.cpp:7:15: error: invalid conversion from 'const char*' to 'int' [-fpermissive]
+    7 | }
+      |               ^            
+      |               |
+      |               const char*
+01e1e619badd45d49f4d4f04b1882d51.cpp:11:5: error: 'cout' was not declared in this scope
