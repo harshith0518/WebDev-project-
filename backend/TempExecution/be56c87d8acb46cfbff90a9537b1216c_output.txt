@@ -1,7 +1,0 @@
-be56c87d8acb46cfbff90a9537b1216c.cpp: In function 'int main()':
-be56c87d8acb46cfbff90a9537b1216c.cpp:11:5: error: 'cout' was not declared in this scope; did you mean 'std::cout'?
-In file included from C:/msys64/ucrt64/include/c++/14.1.0/x86_64-w64-mingw32/bits/stdc++.h:146,
-                 from be56c87d8acb46cfbff90a9537b1216c.cpp:3:
-C:/msys64/ucrt64/include/c++/14.1.0/iostream:63:18: note: 'std::cout' declared here
-   63 |   extern ostream cout;          ///< Linked to standard output
-      |                  ^~~~

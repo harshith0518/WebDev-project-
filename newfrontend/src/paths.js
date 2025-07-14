@@ -15,6 +15,7 @@ const paths = {
   CONTESTS:'/contests',
   EDITPROFILE: 'profile/:id/edit',
   SOLUTIONS:'/solutions',
+  ADDPROBLEM: '/problems/add-problem',
 };
 
 export default paths;

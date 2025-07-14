@@ -1,4 +1,0 @@
-  File "C:\Users\ASUS\OneDrive\Desktop\DRFreactTut\NewOnlineJudge\backend\TempExecution\98f09ef7ec6f42c9acb2370f121a9d02.py", line 7
-    int main() {
-        ^^^^
-SyntaxError: invalid syntax

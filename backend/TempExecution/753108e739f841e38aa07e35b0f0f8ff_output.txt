@@ -1,4 +1,0 @@
-753108e739f841e38aa07e35b0f0f8ff.cpp:1:9: fatal error: bits.stdc++.h: No such file or directory
-    1 | #include<bits.stdc++.h>
-      |         ^~~~~~~~~~~~~~~
-compilation terminated.

@@ -1,4 +1,0 @@
-ee690882da554188b499199394f6695f.cpp: In function 'int main()':
-ee690882da554188b499199394f6695f.cpp:13:5: error: expected ',' or ';' before 'std'
-   13 | 
-      |     ^  

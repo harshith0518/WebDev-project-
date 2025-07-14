@@ -16,6 +16,7 @@ import Contests from './components/Contests'
 import Solutions from './components/Solutions'
 import EditProfile from './components/EditProfile'
 import Logout from './components/Logout'  
+import AddProblem from './components/AddProblem'
 
 
 function App() {
@@ -38,6 +39,7 @@ function App() {
     <Route path={paths.LEADERBOARD} element={<Leaderboard/>}/>
     <Route path={paths.SOLUTIONS} element={<Solutions/>}/>
     <Route path={paths.CONTESTS} element={<Contests/>}/>
+    <Route path={paths.ADDPROBLEM} element={<AddProblem/>}/>
     </Routes>
     </BrowserRouter>
   )

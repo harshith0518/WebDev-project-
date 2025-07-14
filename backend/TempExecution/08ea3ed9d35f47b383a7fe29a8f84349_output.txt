@@ -1,5 +1,0 @@
-Traceback (most recent call last):
-  File "C:\Users\ASUS\OneDrive\Desktop\DRFreactTut\NewOnlineJudge\backend\TempExecution\08ea3ed9d35f47b383a7fe29a8f84349.py", line 7, in <module>
-    b = int(input())
-            ~~~~~^^
-EOFError: EOF when reading a line

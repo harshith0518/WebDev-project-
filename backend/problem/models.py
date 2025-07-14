@@ -30,13 +30,16 @@ class Problem(models.Model):
 
 
 class Testcase(models.Model):
-    inputFile = models.FileField()
-    outputFile = models.FileField()
+    input_file = models.FileField(upload_to='testcases/inputs/',null = True,blank = True)
+    output_file = models.FileField(upload_to='testcases/outputs/',null = True,blank = True)
     problem = models.ForeignKey(
         Problem,
         on_delete = models.CASCADE,
         related_name='testcases',
     )
+    def __str__(self):
+        return f"Testcase for Problem {self.problem.id}"
+
 
 class Solution(models.Model):
     code = models.FileField()
