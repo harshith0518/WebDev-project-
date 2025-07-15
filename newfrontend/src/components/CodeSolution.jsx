@@ -8,6 +8,8 @@ import { useNavigate, useParams, useLocation } from 'react-router-dom';
 import paths from '../paths';
 import axios from 'axios';
 
+
+
 const getMonacoLanguage = (lang) => {
   switch (lang) {
     case 'cpp': return 'cpp';
@@ -35,25 +37,39 @@ const CodeSolution = () => {
   const [isRunning, setIsRunning] = useState(false);
 
   useEffect(() => {
-    const getProblem = async () => {
-      try {
-        const token = await getValidAccessToken();
-        if (!token) {
-          localStorage.setItem('fall_back_page', location.pathname);
-          navigate(paths.LOGIN);
-          return;
-        }
-        const response = await axios.get(`http://localhost:8000/problems/${id}/`, {
-          headers: { Authorization: `Bearer ${token}` }
-        });
-        setProblem(response.data);
-        setInput(response.data.sample_testcase_INP || '');
-      } catch (err) {
-        console.error("Error fetching problem:", err);
+  const controller = new AbortController();
+
+  const getProblem = async () => {
+    try {
+      const token = await getValidAccessToken();
+      if (!token) {
+        localStorage.setItem('fall_back_page', location.pathname);
+        navigate(paths.LOGIN);
+        return;
       }
-    };
-    getProblem();
-  }, [id, location.pathname, navigate]);
+
+      const response = await axios.get(`http://localhost:8000/problems/${id}/`, {
+        headers: { Authorization: `Bearer ${token}` },
+        signal: controller.signal, // ✅ attach AbortController
+      });
+      setProblem(response.data);
+      setInput(response.data.sample_testcase_INP || '');
+    } catch (err) {
+      if (axios.isCancel(err) || err.code === 'ERR_CANCELED' || err?.type === 'cancelation') {
+        // console.log("Request canceled");
+        return;
+      }
+      console.error("Error fetching problem:", err);
+    }
+  };
+
+  getProblem();
+
+  return () => {
+    controller.abort(); // ✅ abort request on component unmount
+  };
+}, [id, location.pathname, navigate]);
+
 
   const handleSubmitCode = async (e) => {
     e.preventDefault();
@@ -174,8 +190,10 @@ const CodeSolution = () => {
   }, [monaco]);
 
   return (
-    <div className="relative min-h-screen bg-gradient-to-br from-gray-900 via-indigo-950 to-yellow-400 text-white font-mono">
-      <Navbar />
+    <>
+    <Navbar />
+    <div className="relative h-11/12 bg-gradient-to-br from-gray-900 via-indigo-950 to-yellow-400 text-white font-mono">
+      
       <Split className="flex h-[calc(100vh-60px)]" minSize={320} cursor="col-resize">
         {/* LEFT: Problem Section */}
         <div className="overflow-y-auto p-6 border-r border-gray-800 bg-gray-900 h-full scrollbar-thin scrollbar-thumb-indigo-900 scrollbar-track-gray-800 hover:scrollbar-thumb-yellow-500">
@@ -327,6 +345,7 @@ const CodeSolution = () => {
         </div>
       </Split>
     </div>
+    </>
   );
 };
 

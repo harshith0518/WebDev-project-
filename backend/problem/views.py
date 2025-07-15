@@ -13,8 +13,6 @@ import zipfile
 import shutil
 import subprocess
 import traceback
-import json
-from django.conf import settings
 from django.core.files.base import ContentFile
 
 class ProblemsListAPIView(APIView):
@@ -25,15 +23,6 @@ class ProblemsListAPIView(APIView):
         serializer = ProblemsListSerializer(problems, many=True)
         return Response(serializer.data)
 
-import os
-import shutil
-import zipfile
-from rest_framework.views import APIView
-from rest_framework.parsers import MultiPartParser, FormParser
-from rest_framework.permissions import IsAuthenticated
-from rest_framework.response import Response
-from django.core.files.base import ContentFile
-from .models import Problem, Testcase
 
 class AddProblemAPIView(APIView):
     parser_classes = [MultiPartParser, FormParser]
@@ -45,7 +34,6 @@ class AddProblemAPIView(APIView):
             if not zip_file:
                 return Response({"error": "Zip file not provided."}, status=400)
 
-            # Create Problem instance
             problem = Problem.objects.create(
                 problemTitle=request.data.get("problemTitle"),
                 problemStatement=request.data.get("problemStatement"),
@@ -54,14 +42,12 @@ class AddProblemAPIView(APIView):
                 sample_testcase_OUT=request.data.get("sample_testcase_OUT"),
             )
 
-            # Extract zip
             temp_dir = f"temp_testcases_problem_{problem.id}"
             os.makedirs(temp_dir, exist_ok=True)
 
             with zipfile.ZipFile(zip_file, 'r') as zip_ref:
                 zip_ref.extractall(temp_dir)
 
-            # Handle one extra root folder in zip
             root_items = os.listdir(temp_dir)
             extracted_root = temp_dir
             if len(root_items) == 1:
@@ -119,7 +105,6 @@ class SubmitCodeAPIView(APIView):
 
         counter = 0
         max_runtime = 0
-        # print(f"Submitting code to Problem ID: {problem.id}, Lang: {lang}")
 
         for testcase in problem.testcases.all():
             counter += 1
@@ -130,26 +115,19 @@ class SubmitCodeAPIView(APIView):
                 input_data = testcase.input_file.read().decode().strip()
                 testcase.output_file.seek(0)
                 expected_output = testcase.output_file.read().decode().strip()
-                # print(f"📥 Input: {input_data}")
-                # print(f"📤 Expected Output: {expected_output}")
 
                 output = run_code(lang, input_data, code)
                 actual_output = output.get("output_data", "").strip()
                 runtime = output.get("runtime", 0)
-
-                # print(f"🧾 Actual Output: {actual_output}")
-                # print(f"⏱ Runtime: {runtime}s")
 
                 if actual_output != expected_output:
                     return Response({
                         "verdict": f"Wrong Answer on testcase {counter}",
                         "success":False,
                     }, status=200)
-
                 max_runtime = max(max_runtime, runtime)
-
             except Exception as e:
-                print("🔥 Exception in testcase execution:")
+                print("Exception in testcase execution:")
                 traceback.print_exc()
                 return Response({
                     "error": "Code execution failed.",
@@ -172,7 +150,6 @@ class RunCodeAPIView(APIView):
         code = request.data.get("code")
         input_data = request.data.get("input_data", "")
         return Response(run_code(lang,input_data,code))
-
 
 
 def run_code(lang, input_data, code):
@@ -204,6 +181,7 @@ def run_code(lang, input_data, code):
             compile_cmd = None
         else:
             return {
+                "success" : False,
                 "output_data": "",
                 "verdict": "Unsupported Language",
                 "runtime": None,
@@ -253,12 +231,10 @@ def run_code(lang, input_data, code):
             if result.returncode != 0:
                 verdict = "Runtime Error"
         except subprocess.TimeoutExpired:
-            verdict = "Time Limit Exceeded"
-            output_data = "Execution time exceeded limit."
-            runtime = 2.0
             return {
                 "output_data": output_data,
-                "verdict": verdict,
+                "verdict": "Time Limit Exceeded",
+                "success":True,
                 "runtime": runtime
             }
 
@@ -266,6 +242,7 @@ def run_code(lang, input_data, code):
             output_data = f.read()
 
         return {
+            "success" : True,
             "output_data": output_data,
             "verdict": verdict,
             "runtime": runtime
@@ -278,5 +255,6 @@ def run_code(lang, input_data, code):
             "output_data": "",
             "verdict": "Internal Error",
             "runtime": None,
+            "success": False,
             "error": str(e)
         }

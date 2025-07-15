@@ -71,55 +71,79 @@ const AddProblem = () => {
           <h2 className="text-3xl font-bold mb-6 text-yellow-400 text-center">➕ Add a New Coding Problem</h2>
 
           <form onSubmit={handleSubmit} className="space-y-4">
-            <input
-              name="problemTitle"
-              value={formData.problemTitle}
-              onChange={handleChange}
-              placeholder="Problem Title"
-              className="w-full bg-gray-800 text-white placeholder-indigo-300 px-4 py-2 rounded border border-indigo-700"
-            />
-            <textarea
-              name="problemStatement"
-              value={formData.problemStatement}
-              onChange={handleChange}
-              placeholder="Problem Statement"
-              className="w-full bg-gray-800 text-white placeholder-indigo-300 px-4 py-2 rounded border border-indigo-700 min-h-[100px]"
-            />
-            <textarea
-              name="constraints"
-              value={formData.constraints}
-              onChange={handleChange}
-              placeholder="Constraints"
-              className="w-full bg-gray-800 text-white placeholder-indigo-300 px-4 py-2 rounded border border-indigo-700 min-h-[80px]"
-            />
-            <textarea
-              name="sample_testcase_INP"
-              value={formData.sample_testcase_INP}
-              onChange={handleChange}
-              placeholder="Sample Input"
-              className="w-full bg-gray-800 text-white placeholder-indigo-300 px-4 py-2 rounded border border-indigo-700"
-            />
-            <textarea
-              name="sample_testcase_OUT"
-              value={formData.sample_testcase_OUT}
-              onChange={handleChange}
-              placeholder="Sample Output"
-              className="w-full bg-gray-800 text-white placeholder-indigo-300 px-4 py-2 rounded border border-indigo-700"
-            />
-            <input
-              type="file"
-              accept=".zip"
-              onChange={handleFileChange}
-              className="w-full bg-gray-800 text-white file:mr-4 file:py-2 file:px-4 file:rounded-md file:border-0 file:text-sm file:font-semibold file:bg-yellow-500 file:text-black hover:file:bg-yellow-400"
-            />
+            <div>
+                <label className="text-sm font-semibold text-yellow-300">Problem Title</label>
+                <input
+                name="problemTitle"
+                value={formData.problemTitle}
+                onChange={handleChange}
+                placeholder="Problem Title"
+                className="w-full bg-gray-800 text-white placeholder-indigo-300 px-4 py-2 rounded border border-indigo-700"
+                />
+            </div>
+
+            <div>
+                <label className="text-sm font-semibold text-yellow-300">Problem Statement</label>
+                <textarea
+                name="problemStatement"
+                value={formData.problemStatement}
+                onChange={handleChange}
+                placeholder="Problem Statement"
+                className="w-full bg-gray-800 text-white placeholder-indigo-300 px-4 py-2 rounded border border-indigo-700 min-h-[100px]"
+                />
+            </div>
+
+            <div>
+                <label className="text-sm font-semibold text-yellow-300">Constraints</label>
+                <textarea
+                name="constraints"
+                value={formData.constraints}
+                onChange={handleChange}
+                placeholder="Constraints"
+                className="w-full bg-gray-800 text-white placeholder-indigo-300 px-4 py-2 rounded border border-indigo-700 min-h-[80px]"
+                />
+            </div>
+
+            <div>
+                <label className="text-sm font-semibold text-yellow-300">Sample Input</label>
+                <textarea
+                name="sample_testcase_INP"
+                value={formData.sample_testcase_INP}
+                onChange={handleChange}
+                placeholder="Sample Input"
+                className="w-full bg-gray-800 text-white placeholder-indigo-300 px-4 py-2 rounded border border-indigo-700"
+                />
+            </div>
+
+            <div>
+                <label className="text-sm font-semibold text-yellow-300">Sample Output</label>
+                <textarea
+                name="sample_testcase_OUT"
+                value={formData.sample_testcase_OUT}
+                onChange={handleChange}
+                placeholder="Sample Output"
+                className="w-full bg-gray-800 text-white placeholder-indigo-300 px-4 py-2 rounded border border-indigo-700"
+                />
+            </div>
+
+            <div>
+                <label className="text-sm font-semibold text-yellow-300">Upload Zipped Testcases Folder</label>
+                <input
+                type="file"
+                accept=".zip"
+                onChange={handleFileChange}
+                className="w-full bg-gray-800 text-white file:mr-4 file:py-2 file:px-4 file:rounded-md file:border-0 file:text-sm file:font-semibold file:bg-yellow-500 file:text-black hover:file:bg-yellow-400"
+                />
+            </div>
 
             <button
-              type="submit"
-              className="w-full py-3 bg-indigo-600 hover:bg-yellow-400 text-white hover:text-black font-bold rounded-md transition duration-300"
+                type="submit"
+                className="w-full py-3 bg-indigo-600 hover:bg-yellow-400 text-white hover:text-black font-bold rounded-md transition duration-300"
             >
-            Upload Problem
+                Upload Problem
             </button>
-          </form>
+           </form>
+
         </div>
       </div>
     </>
