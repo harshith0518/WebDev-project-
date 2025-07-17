@@ -28,8 +28,6 @@ const Login = () => {
     const { access, refresh } = response.data.tokens;
     localStorage.setItem("access_token", access);
     localStorage.setItem("refresh_token", refresh);
-    // console.log("Access :", access);
-    // console.log("Refresh :", refresh);
     const fallBack = localStorage.getItem('fall_back_page');
     navigate(fallBack?fallBack:paths.HOME);
   } catch (error) {

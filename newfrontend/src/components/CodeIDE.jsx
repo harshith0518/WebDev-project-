@@ -24,14 +24,30 @@ const CodeIDE = () => {
   const monaco = useMonaco();
 
   const [themeReady, setThemeReady] = useState(false);
-  const [language, setLanguage] = useState('cpp');
-  const [code, setCode] = useState('// Write your code here...');
-  const [input, setInput] = useState('Type input here...');
+  const [language, setLanguage] = useState(localStorage.getItem('CodeIDE-language') || 'cpp');
+  const [code, setCode] = useState(localStorage.getItem('CodeIDE-code') || '// Write your code here...');
+  const [input, setInput] = useState(localStorage.getItem('CodeIDE-input') || 'Type input here...');
+  const [expectedOutput, setExpectedOutput] = useState(localStorage.getItem('CodeIDE-expectedOutput') || '');
   const [output, setOutput] = useState('Output will appear here after running...');
-  const [expectedOutput, setExpectedOutput] = useState('');
   const [runtime, setRuntime] = useState('---');
   const [verdict, setVerdict] = useState('---');
   const [isRunning, setIsRunning] = useState(false);
+
+  useEffect(() => {
+    localStorage.setItem('CodeIDE-code', code);
+  }, [code]);
+
+  useEffect(() => {
+    localStorage.setItem('CodeIDE-language', language);
+  }, [language]);
+
+  useEffect(() => {
+    localStorage.setItem('CodeIDE-input', input);
+  }, [input]);
+
+  useEffect(() => {
+    localStorage.setItem('CodeIDE-expectedOutput', expectedOutput);
+  }, [expectedOutput]);
 
   useEffect(() => {
     const checkAuth = async () => {
@@ -43,18 +59,6 @@ const CodeIDE = () => {
     };
     checkAuth();
   }, []);
-
-  useEffect(() => {
-  const handleKeyDown = (e) => {
-    if (e.ctrlKey && e.key === "'") {
-      e.preventDefault();
-      handleRunCode(e);
-    }
-  };
-
-  window.addEventListener('keydown', handleKeyDown);
-  return () => window.removeEventListener('keydown', handleKeyDown);
-}, []);
 
   useEffect(() => {
     if (monaco) {
@@ -87,7 +91,7 @@ const CodeIDE = () => {
   }, [monaco]);
 
   const handleRunCode = async (e) => {
-    e.preventDefault();
+    if (e) e.preventDefault();
     setIsRunning(true);
     const token = await getValidAccessToken();
     if (!token) {
@@ -113,7 +117,6 @@ const CodeIDE = () => {
       setOutput(runResponse.data.output_data ?? '');
       setVerdict(runResponse.data.verdict ?? '---');
       setRuntime(runResponse.data.runtime ?? '---');
-
     } catch (err) {
       console.error("Execution error:", err);
       setVerdict("Error occurred");

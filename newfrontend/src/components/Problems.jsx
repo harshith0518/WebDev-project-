@@ -6,50 +6,6 @@ import { getValidAccessToken } from '../authUtils/getValidAccessToken';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 
-
-// const problems = [
-//   {
-//     id: 1,
-//     title: "Knight's Escape",
-//     desc: "Given a chessboard, help Batman escape using only knight moves. Find the minimum number of moves from start to target.",
-//   },
-//   {
-//     id: 2,
-//     title: "Gotham Signal Decoder",
-//     desc: "The Bat-Signal is encoded. Decode a given binary message using a custom mapping rule and return the decoded string.",
-//   },
-//   {
-//     id: 3,
-//     title: "Joker's Maze",
-//     desc: "Find the shortest path out of Joker's maze. You're given a grid with traps and open spaces — only safe moves allowed.",
-//   },
-//   {
-//     id: 4,
-//     title: "Batmobile Fuel Optimization",
-//     desc: "Optimize fuel usage for the Batmobile across city checkpoints. Return the minimal cost path with fuel constraints.",
-//   },
-//   {
-//     id: 5,
-//     title: "Wayne Tower Surveillance",
-//     desc: "Design an efficient system to monitor all rooms in Wayne Tower with the least number of cameras. Each camera sees in 4 directions.",
-//   },
-//   {
-//     id: 6,
-//     title: "Riddle Me This!",
-//     desc: "You're given a riddle in the form of a logic expression. Can you evaluate whether Batman should act or wait?",
-//   },
-//   {
-//     id: 7,
-//     title: "Penguin's Ice Trap",
-//     desc: "Navigate through Penguin's icy puzzle. Given a matrix of ice strength values, find the safest route to escape before the ice cracks.",
-//   },
-//   {
-//     id: 8,
-//     title: "Robin's Rescue Mission",
-//     desc: "Robin is trapped at a location on a grid. Given enemy positions and obstacles, plan a path to rescue him undetected.",
-//   },
-// ];
-
 const Problems = () => {
   const navigate = useNavigate(); 
   const [searchQuery, setSearchQuery] = useState('');
@@ -136,8 +92,8 @@ const Problems = () => {
         <h1 className="text-4xl font-bold text-center text-yellow-400 mb-10 drop-shadow z-30 relative">
           Problems to Conquer
         </h1>
-
-        {/* 🔥 Problem of the Day */}
+{/* 
+        🔥 Problem of the Day 
         <div className="max-w-3xl mx-auto mb-10 z-30 relative">
           <div className="bg-gray-900 p-6 rounded-xl shadow hover:shadow-yellow-400 transition">
             <h3 className="text-xl font-bold text-yellow-400 mb-2">Problem of the Day</h3>
@@ -149,7 +105,7 @@ const Problems = () => {
               Solve Now
             </button>
           </div>
-        </div>
+        </div> */}
 
         {/* 🔍 Search + Dropdown */}
         <div className="z-30 relative mb-6 max-w-5xl mx-auto flex flex-col md:flex-row justify-between items-center gap-4">

@@ -7,7 +7,7 @@ User = get_user_model()
 
 
 class Problem(models.Model):
-    problemTitle = models.CharField(max_length = 20)
+    problemTitle = models.CharField(max_length = 30)
     problemStatement = models.TextField()
     totalAccepted = models.IntegerField(default=0)
     totalRejected = models.IntegerField(default=0)
@@ -53,8 +53,21 @@ class Solution(models.Model):
         on_delete=models.CASCADE,
         related_name='solutions',
     )
+    submittedAt = models.DateTimeField(auto_now_add=True)
     verdict = models.CharField(max_length=30)   # --> accepted,wrong answer,memory/time limit exceeded,run time error
-    language = models.CharField(max_length = 10)  # cpp,python,java
-    
+    language = models.CharField(max_length = 10)  # c,cpp,python,java
+    success = models.BooleanField(default=False)
+    runtime = models.FloatField(default=0)
     def __str__(self):
         return f'solution{self.id} submitted by {self.user.username} for problem {self.problem.problemTitle}'
+
+
+class ProblemSet(models.Model):
+    problems = models.ManyToManyField(Problem,related_name = 'problem_sets')
+    topics = models.CharField(max_length=100)
+    difficultyLevel = models.CharField(max_length = 30)
+    problemSetTitle = models.CharField(max_length=30)
+    def  __str__(self):
+        return self.problemSetTitle
+
+

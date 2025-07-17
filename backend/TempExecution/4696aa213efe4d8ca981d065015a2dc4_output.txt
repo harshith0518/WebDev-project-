@@ -1,0 +1,4 @@
+Traceback (most recent call last):
+  File "C:\Users\ASUS\OneDrive\Desktop\DRFreactTut\NewOnlineJudge\backend\TempExecution\4696aa213efe4d8ca981d065015a2dc4.py", line 5, in <module>
+    a = int(input())
+ValueError: invalid literal for int() with base 10: '2 3'

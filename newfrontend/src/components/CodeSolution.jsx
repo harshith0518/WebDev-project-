@@ -29,7 +29,6 @@ const CodeSolution = () => {
   const [code, setCode] = useState('// Write your knight path algorithm here...');
   const [themeReady, setThemeReady] = useState(false);
   const [problem, setProblem] = useState(null);
-
   const [input, setInput] = useState('');
   const [output, setOutput] = useState('Output will appear here after running...');
   const [verdict, setVerdict] = useState('---');
@@ -50,13 +49,12 @@ const CodeSolution = () => {
 
       const response = await axios.get(`http://localhost:8000/problems/${id}/`, {
         headers: { Authorization: `Bearer ${token}` },
-        signal: controller.signal, // ✅ attach AbortController
+        signal: controller.signal,
       });
       setProblem(response.data);
       setInput(response.data.sample_testcase_INP || '');
     } catch (err) {
       if (axios.isCancel(err) || err.code === 'ERR_CANCELED' || err?.type === 'cancelation') {
-        // console.log("Request canceled");
         return;
       }
       console.error("Error fetching problem:", err);
@@ -66,7 +64,7 @@ const CodeSolution = () => {
   getProblem();
 
   return () => {
-    controller.abort(); // ✅ abort request on component unmount
+    controller.abort();
   };
 }, [id, location.pathname, navigate]);
 
@@ -99,8 +97,15 @@ const CodeSolution = () => {
       setRuntime(submitResponse.data.runtime ?? '---');
     } catch (err) {
       console.error("Execution error:", err);
-      setVerdict("Error occurred");
-      setRuntime("N/A");
+      if (err.response) {
+        const data = err.response.data;
+        setOutput(data.output_data ?? '');
+        setVerdict(data.verdict ?? 'Error occurred');
+        setRuntime(data.runtime ?? 'N/A');
+      } else {
+        setVerdict("Unknown error occurred");
+        setRuntime("N/A");
+      }
     } finally {
       setIsRunning(false);
     }

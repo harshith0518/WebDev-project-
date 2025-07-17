@@ -1,0 +1,4 @@
+10c982d758324cee83ca3832594d4c0b.cpp:11:9: fatal error: btis/stdc++.h: No such file or directory
+   11 |     int a,b;
+      |         ^~~~           
+compilation terminated.
