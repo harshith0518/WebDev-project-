@@ -8,7 +8,7 @@ User = get_user_model()
 class ProblemsListSerializer(ModelSerializer):
     class Meta:
         model = Problem
-        fields = ['problemTitle','problemStatement','difficultyLevel','id']
+        fields = ['problemTitle','problemStatement','difficultyLevel','id','topics']
         
         
 class getProblemSerializer(ModelSerializer):
@@ -21,22 +21,22 @@ class ProblemSetSerializer(ModelSerializer):
         model = ProblemSet
         fields = ['problemSetTitle','difficultyLevel','topics','id']
 
-class ProblemSerializer(ModelSerializer):
+class BasicProblemSerializer(ModelSerializer):
     class Meta:
         model = Problem
         fields = ['id', 'problemTitle','difficultyLevel']
 
 
 class ProblemSetSerializerAllFields(ModelSerializer):
-    problems = ProblemSerializer(many=True)
+    problems = BasicProblemSerializer(many=True)
     class Meta:
         model = ProblemSet
         fields = '__all__'
-        
+
 
 class SolutionsSerializerList(ModelSerializer):
     user = forNavbarSerializer()
-    problem = ProblemSerializer()
+    problem = BasicProblemSerializer()
     class Meta:
         model = Solution
         fields = ['user','problem','verdict','success','id','submittedAt']

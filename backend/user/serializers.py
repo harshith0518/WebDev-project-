@@ -14,3 +14,22 @@ class forNavbarSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
         fields = ['username','id','profile_pic']
+
+
+class isStaffSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = User
+        fields = ['is_staff']
+
+
+class ChangeProfileSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = User
+        fields = ['username', 'first_name', 'last_name', 'email', 'profile_pic']
+        extra_kwargs = {
+            'username': {'required': False},
+            'first_name': {'required': False},
+            'last_name': {'required': False},
+            'email': {'required': False},
+            'profile_pic': {'required': False},
+        }

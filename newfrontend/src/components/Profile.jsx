@@ -35,7 +35,7 @@ const UserProfile = () => {
   }, [id, navigate]);
 
   const handleLogoutClick = () => navigate(paths.LOGOUT);
-  const handleEditProfileClick = () => navigate(`/profile/${id}/edit`);
+  // const handleEditProfileClick = () => navigate(`/profile/${id}/edit`);
 
   if (!viewUser) return <div className="text-white text-center mt-10">Loading...</div>;
 
@@ -90,11 +90,11 @@ const UserProfile = () => {
                     })}
                   </p>
                   <div className="mt-4 space-x-4">
-                    <button 
+                    {/* <button 
                       onClick={handleEditProfileClick}
                       className="bg-indigo-800 hover:bg-indigo-900 text-white font-semibold px-5 py-2 rounded-xl shadow-lg transition">
                       ✏️ Edit Profile
-                    </button>
+                    </button> */}
                     <button 
                       onClick={handleLogoutClick}
                       className="bg-red-600 hover:bg-red-700 text-white font-semibold px-5 py-2 rounded-xl shadow-lg transition">

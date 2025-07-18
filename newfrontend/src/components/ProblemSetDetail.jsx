@@ -18,7 +18,7 @@ const ProblemSetDetail = () => {
       try {
         const res = await axios.get(`http://localhost:8000/problems/problem-sets/${id}/`, {
           headers: { Authorization: `Bearer ${token}` }
-        });
+        }); 
         setSetDetail(res.data);
       } catch (err) {
         console.error('Error fetching set detail', err);

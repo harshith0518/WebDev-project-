@@ -14,6 +14,9 @@ class Problem(models.Model):
     sample_testcase_INP = models.TextField(default = '')
     sample_testcase_OUT = models.TextField(default='no constraints provided')
     constraints = models.TextField(default='')
+    topics  = models.CharField(default='')
+    timeLimit = models.IntegerField(default = 2)
+    memoryLimit = models.IntegerField(default=256)
     difficultyLevel = models.CharField(max_length=10)   # only accepts the Easy,Medium ,Hard strings
     author = models.ForeignKey(
         User,

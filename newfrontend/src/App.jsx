@@ -19,6 +19,7 @@ import Logout from './components/Logout'
 import AddProblem from './components/AddProblem'
 import ProblemSets from './components/ProblemSets'
 import ProblemSetDetail from './components/ProblemSetDetail'
+import AddProblemSet from './components/AddProblemSet'
 
 
 function App() {
@@ -44,6 +45,7 @@ function App() {
     <Route path={paths.ADDPROBLEM} element={<AddProblem/>}/>
     <Route path={paths.PROBLEMSETS} element={<ProblemSets/>}/>
     <Route path={`problem-sets/:id/problem-set`} element={<ProblemSetDetail/>}/>
+    <Route path={`problem-sets/add-set`} element={<AddProblemSet/>}/>
     </Routes>
     </BrowserRouter>
   )

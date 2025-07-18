@@ -15,8 +15,8 @@ class CustomUser(AbstractUser):
     date_joined = models.DateTimeField(auto_now_add=True)
     profile_pic = models.ImageField(upload_to="profile_pics/", blank=True, null=True)
     USERNAME_FIELD = 'email'
-    REQUIRED_FIELDS = [] 
+    REQUIRED_FIELDS = []
     objects = UserManager()
-
+    
     def __str__(self):
         return self.email

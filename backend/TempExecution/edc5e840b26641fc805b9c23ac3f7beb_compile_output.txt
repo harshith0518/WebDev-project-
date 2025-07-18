@@ -1,3 +1,0 @@
-edc5e840b26641fc805b9c23ac3f7beb.cpp:1:1: error: 'w' does not name a type
-    1 | w
-      | ^

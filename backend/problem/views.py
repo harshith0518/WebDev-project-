@@ -35,6 +35,43 @@ class getProblemSetAPIView(APIView):
         serializer = ProblemSetSerializerAllFields(problemSet)
         return Response(serializer.data)
 
+
+
+class addProblemSetAPIView(APIView):
+    authentication_classes = [JWTAuthentication]
+    permission_classes = [IsAuthenticated]
+
+    def post(self, request):
+        title = request.data.get('problemSetTitle')
+        difficulty = request.data.get('difficultyLevel')
+        topics = request.data.get('topics')
+        problem_ids = request.data.get('problemIds')
+
+        if not title or not difficulty or not topics or not problem_ids:
+            return Response({"error": "All fields are required."}, status=400)
+        try:
+            problems = Problem.objects.filter(id__in=problem_ids)
+            if problems.count() != len(problem_ids):
+                return Response({"error": "Some problem IDs are invalid."}, status=400)
+            problem_set = ProblemSet.objects.create(
+                problemSetTitle=title,
+                difficultyLevel=difficulty,
+                topics=topics
+            )
+            problem_set.problems.set(problems)
+            problem_set.save()
+            return Response({
+                "message": "ProblemSet created successfully",
+                "id": problem_set.id,
+                "title": problem_set.problemSetTitle,
+                "difficulty": problem_set.difficultyLevel,
+                "topics": problem_set.topics,
+                "problems": [p.id for p in problems]
+            }, status=201)
+
+        except Exception as e:
+            return Response({"error": str(e)}, status=500)
+
 class AddProblemAPIView(APIView):
     parser_classes = [MultiPartParser, FormParser]
     permission_classes = [IsAuthenticated]
@@ -51,6 +88,9 @@ class AddProblemAPIView(APIView):
                 constraints=request.data.get('constraints'),
                 sample_testcase_INP=request.data.get('sample_testcase_INP'),
                 sample_testcase_OUT=request.data.get('sample_testcase_OUT'),
+                timeLimit = request.data.get('timeLimit'),
+                memoryLimit = request.data.get('memoryLimit'),
+                topics = request.data.get('topics'),
             )
 
             temp_dir = f'temp_testcases_problem_{problem.id}'

@@ -1,7 +1,0 @@
-f6d286380c874cafae7da3a5e18a6598.cpp:3:21: error: missing terminating > character
-    3 | 
-      |                     ^
-f6d286380c874cafae7da3a5e18a6598.cpp:3:9: fatal error: bits.stdc++: No such file or directory
-    3 | 
-      |         ^
-compilation terminated.

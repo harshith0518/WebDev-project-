@@ -1,2 +1,0 @@
-f2bbb55f913e4403a284532562c095d6.cpp: In function 'int main()':
-f2bbb55f913e4403a284532562c095d6.cpp:17:1: error: 'q' was not declared in this scope

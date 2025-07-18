@@ -1,2 +1,0 @@
-50c1d1e744ba4e359bec2d875bc7082d.cpp: In function 'int main()':
-50c1d1e744ba4e359bec2d875bc7082d.cpp:23:11: error: invalid type argument of unary '*' (have 'int')

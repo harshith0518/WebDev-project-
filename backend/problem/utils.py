@@ -1,10 +1,11 @@
 import os,uuid,subprocess,time
+from django.conf import settings
+
 
 
 def compile_code(lang, code):
     try:
-        curr_dir = os.getcwd()
-        temp_dir = os.path.join(curr_dir, 'TempExecution')
+        temp_dir = os.path.join(settings.MEDIA_ROOT, 'Outputiles')
         os.makedirs(temp_dir, exist_ok=True)
 
         unique_id = uuid.uuid4().hex

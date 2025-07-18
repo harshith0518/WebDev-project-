@@ -3,13 +3,66 @@ import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 import { getValidAccessToken } from '../authUtils/getValidAccessToken';
 import Navbar from './Navbar';
+import Select from 'react-select';
+import topicOptions from '../TopicOptions'
+
+
+const customSelectStyles = {
+  control: (base, state) => ({
+    ...base,
+    backgroundColor: '#1f2937',
+    color: '#fff',
+    borderColor: state.isFocused ? '#eab308' : '#4b5563',
+    boxShadow: 'none',
+    '&:hover': {
+      borderColor: '#eab308',
+    },
+  }),
+  menu: (base) => ({
+    ...base,
+    backgroundColor: '#1f2937',
+    color: '#fff',
+  }),
+  option: (base, state) => ({
+    ...base,
+    backgroundColor: state.isFocused ? '#374151' : '#1f2937',
+    color: 'white',
+    cursor: 'pointer',
+  }),
+  multiValue: (base) => ({
+    ...base,
+    backgroundColor: '#374151',
+    color: 'white',
+  }),
+  multiValueLabel: (base) => ({
+    ...base,
+    color: 'white',
+  }),
+  multiValueRemove: (base) => ({
+    ...base,
+    color: '#f87171',
+    ':hover': {
+      backgroundColor: '#dc2626',
+      color: 'white',
+    },
+  }),
+  placeholder: (base) => ({
+    ...base,
+    color: '#9ca3af',
+  }),
+  singleValue: (base) => ({
+    ...base,
+    color: 'white',
+  }),
+};
+
+
 
 const AddProblem = () => {
   const [formData, setFormData] = useState({
     problemTitle: '',
     problemStatement: '',
     constraints: '',
-    topics: '',
     sample_testcase_INP: '',
     sample_testcase_OUT: '',
     timeLimit: '',
@@ -17,6 +70,8 @@ const AddProblem = () => {
     difficultyLevel: 'Easy',
     testcases: null,
   });
+
+  const [selectedTopics, setSelectedTopics] = useState([]);
 
   const navigate = useNavigate();
 
@@ -38,6 +93,7 @@ const AddProblem = () => {
     Object.entries(formData).forEach(([key, value]) => {
       data.append(key, value);
     });
+    data.append('topics', selectedTopics.map(t => t.value).join(', '));
 
     try {
       await axios.post('http://localhost:8000/problems/add-problem/', data, {
@@ -113,17 +169,18 @@ const AddProblem = () => {
               />
             </div>
 
+            {/* Topic Selector */}
             <div>
-              <label className="text-sm font-semibold text-yellow-300">Sample Output</label>
-              <textarea
-                name="topics"
-                value={formData.topics}
-                onChange={handleChange}
-                placeholder="Sample Output"
-                className="w-full bg-gray-800 text-white placeholder-indigo-300 px-4 py-2 rounded border border-indigo-700"
+              <label className="text-sm font-semibold text-yellow-300">Topics</label>
+              <Select
+                isMulti
+                options={topicOptions}
+                placeholder="Search & select topics..."
+                styles={customSelectStyles}
+                value={selectedTopics}
+                onChange={setSelectedTopics}
               />
             </div>
-
 
             {/* Sample Input */}
             <div>
@@ -190,9 +247,9 @@ const AddProblem = () => {
               </select>
             </div>
 
-            {/* Upload Zipped Testcases Folder */}
+            {/* Upload Testcases */}
             <div>
-              <label className="text-sm font-semibold text-yellow-300">Upload Zipped Testcases Folder</label>
+              <label className="text-sm font-semibold text-yellow-300">Upload Zipped file <i className='text-red-600'>(name must be 'testcases')</i></label>
               <input
                 type="file"
                 accept=".zip"
@@ -201,7 +258,6 @@ const AddProblem = () => {
               />
             </div>
 
-            {/* Submit Button */}
             <button
               type="submit"
               className="w-full py-3 bg-indigo-600 hover:bg-yellow-400 text-white hover:text-black font-bold rounded-md transition duration-300"
@@ -209,7 +265,6 @@ const AddProblem = () => {
               Upload Problem
             </button>
           </form>
-
         </div>
       </div>
     </>
