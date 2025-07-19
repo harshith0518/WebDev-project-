@@ -1,0 +1,5 @@
+Traceback (most recent call last):
+  File "/app/media/Outputiles/7f83672a709045778af7fcb7834bc982.py", line 7, in <module>
+    for i in range(arr): sum+=i
+             ^^^^^^^^^^
+TypeError: 'list' object cannot be interpreted as an integer

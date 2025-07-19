@@ -16,10 +16,6 @@ class forNavbarSerializer(serializers.ModelSerializer):
         fields = ['username','id','profile_pic']
 
 
-class isStaffSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = User
-        fields = ['is_staff']
 
 
 class ChangeProfileSerializer(serializers.ModelSerializer):

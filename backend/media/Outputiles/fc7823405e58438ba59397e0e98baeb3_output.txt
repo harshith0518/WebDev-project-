@@ -1,0 +1,5 @@
+Traceback (most recent call last):
+  File "/app/media/Outputiles/ba5867f884814516830a2ce60743bd76.py", line 7, in <module>
+    for i in range(arr): sum+=i
+             ^^^^^^^^^^
+TypeError: 'map' object cannot be interpreted as an integer

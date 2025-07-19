@@ -123,7 +123,7 @@ const Problems = () => {
         {isStaff && (
           <div className="z-30 relative flex justify-center mb-4">
             <button
-              onClick={() => navigate('/add-problem')}
+              onClick={() => navigate(paths.ADDPROBLEM)}
               className="bg-yellow-500 hover:bg-yellow-600 text-black px-6 py-2 font-semibold rounded-xl transition"
             >
               ➕ Add New Problem

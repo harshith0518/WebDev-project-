@@ -5,7 +5,7 @@ from rest_framework.permissions import IsAuthenticated
 from rest_framework import status
 from rest_framework.parsers import MultiPartParser,FormParser
 from rest_framework_simplejwt.authentication import JWTAuthentication
-from user.serializers import UserSerializer,forNavbarSerializer,isStaffSerializer,ChangeProfileSerializer
+from user.serializers import UserSerializer,forNavbarSerializer,ChangeProfileSerializer
 from django.contrib.auth.models import User
 from django.contrib.auth import get_user_model
 
@@ -27,12 +27,11 @@ class forNavbarAPIView(APIView):
         serializer = forNavbarSerializer(request.user)
         return Response(serializer.data)
 
-class findIsStaffAPIView(APIView):
+class IsStaffView(APIView):
     permission_classes = [IsAuthenticated]
     authentication_classes = [JWTAuthentication]
     def get(self, request):
-        serializer = isStaffSerializer(request.user)
-        return Response(serializer.data)
+        return Response({'is_staff': request.user.is_staff})
 
 def deleteUser(request, id):
     try:

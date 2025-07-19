@@ -14,7 +14,7 @@ class Problem(models.Model):
     sample_testcase_INP = models.TextField(default = '')
     sample_testcase_OUT = models.TextField(default='no constraints provided')
     constraints = models.TextField(default='')
-    topics  = models.CharField(default='')
+    topics  = models.TextField(default='')
     timeLimit = models.IntegerField(default = 2)
     memoryLimit = models.IntegerField(default=256)
     difficultyLevel = models.CharField(max_length=10)   # only accepts the Easy,Medium ,Hard strings
@@ -45,7 +45,7 @@ class Testcase(models.Model):
 
 
 class Solution(models.Model):
-    code = models.FileField()
+    code = models.TextField()
     user = models.ForeignKey(
         User,
         on_delete=models.CASCADE,
@@ -67,7 +67,7 @@ class Solution(models.Model):
 
 class ProblemSet(models.Model):
     problems = models.ManyToManyField(Problem,related_name = 'problem_sets')
-    topics = models.CharField(max_length=100)
+    topics = models.TextField(default='')
     difficultyLevel = models.CharField(max_length = 30)
     problemSetTitle = models.CharField(max_length=30)
     def  __str__(self):
