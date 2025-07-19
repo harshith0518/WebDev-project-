@@ -17,6 +17,7 @@ const paths = {
   SOLUTIONS:'/solutions',
   ADDPROBLEM: '/problems/add-problem',
   PROBLEMSETS: '/problem-sets',
+  ADDPROBLEMSETS: '/problem-sets/add-set',
 };
 
 export default paths;

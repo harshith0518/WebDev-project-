@@ -113,7 +113,12 @@ const Solutions = () => {
                     key={sol.id}
                     className="border-t border-gray-700 hover:bg-indigo-900 transition duration-200 text-sm"
                   >
-                    <td className="px-4 py-2">{sol.id}</td>
+                    <td className="px-4 py-2"><span
+                        onClick={() => navigate(`/solutions/${sol.id}/solution`)}
+                        className="text-blue-400 hover:text-yellow-300 cursor-pointer underline"
+                      >
+                        {sol.id}
+                      </span></td>
 
                     <td className="px-4 py-2">
                       <span

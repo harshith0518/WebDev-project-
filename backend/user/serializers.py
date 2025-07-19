@@ -7,7 +7,7 @@ User = get_user_model()
 class UserSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
-        fields = ['username','Score','first_name','last_name','Easy_solved','Medium_solved','Hard_solved','date_joined','email','profile_pic']
+        fields = ['username','Score','first_name','last_name','Easy_solved','Medium_solved','Hard_solved','date_joined','email','profile_pic','id']
         
         
 class forNavbarSerializer(serializers.ModelSerializer):

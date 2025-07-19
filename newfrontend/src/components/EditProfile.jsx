@@ -5,14 +5,15 @@ import { useNavigate, useParams } from 'react-router-dom';
 import Navbar from './Navbar';
 
 const EditProfile = () => {
-  const {id} = useParams();
-  const [username, setUsername] = useState('');
-  const [firstName, setFirstName] = useState('');
-  const [lastName, setLastName] = useState('');
-  const [email, setEmail] = useState('');
+  const { id } = useParams();
+  const [formData, setFormData] = useState({
+    firstName: '',
+    lastName: '',
+    email: '',
+  });
   const [profilePic, setProfilePic] = useState(null);
   const [previewPic, setPreviewPic] = useState(null);
-
+  
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -24,13 +25,14 @@ const EditProfile = () => {
         });
         const data = response.data;
 
-        setUsername(data.username || '');
-        setFirstName(data.first_name || '');
-        setLastName(data.last_name || '');
-        setEmail(data.email || '');
+        setFormData({
+          firstName: data.first_name || '',
+          lastName: data.last_name || '',
+          email: data.email || '',
+        });
 
         if (data.profile_pic) {
-          setPreviewPic(data.profile_pic); // backend should return full URL
+          setPreviewPic(data.profile_pic);
         }
       } catch (error) {
         console.error('Error fetching profile:', error);
@@ -38,7 +40,12 @@ const EditProfile = () => {
     };
 
     fetchProfile();
-  }, []);
+  }, [id]);
+
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setFormData((prev) => ({ ...prev, [name]: value }));
+  };
 
   const handleImageChange = (e) => {
     const file = e.target.files[0];
@@ -60,17 +67,15 @@ const EditProfile = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     const token = await getValidAccessToken();
-    const formData = new FormData();
+    const data = new FormData();
 
-    // Only append non-empty fields
-    if (username) formData.append('username', username);
-    if (firstName) formData.append('first_name', firstName);
-    if (lastName) formData.append('last_name', lastName);
-    if (email) formData.append('email', email);
-    if (profilePic) formData.append('profile_pic', profilePic); // match backend
+    Object.entries(formData).forEach(([key, value]) => {
+      data.append(key, value);
+    });
+    if (profilePic) data.append('profile_pic', profilePic);
 
     try {
-      await axios.patch('/api/user/change-profile/', formData, {
+      await axios.patch('/api/user/change-profile/', data, {
         headers: {
           Authorization: `Bearer ${token}`,
           'Content-Type': 'multipart/form-data',
@@ -88,7 +93,7 @@ const EditProfile = () => {
     <>
       <Navbar />
       <div className="relative min-h-[120vh] bg-gradient-to-br from-gray-900 via-indigo-950 to-yellow-900 text-white py-12 px-4">
-        {[...Array(15)].map((_, i) => (
+        {[...Array(12)].map((_, i) => (
           <div
             key={i}
             className="absolute text-yellow-400 opacity-10 animate-float z-10"
@@ -104,49 +109,43 @@ const EditProfile = () => {
         ))}
 
         <div className="relative z-20 max-w-2xl mx-auto bg-black bg-opacity-60 backdrop-blur p-8 rounded-2xl shadow-lg border border-yellow-700">
-          <h2 className="text-3xl font-bold mb-6 text-yellow-400 text-center">🛠️ Edit Profile</h2>
+          <h2 className="text-3xl font-bold mb-6 text-yellow-400 text-center">🛠️ Edit Your Profile</h2>
+
           <form onSubmit={handleSubmit} className="space-y-4">
-            <div>
-              <label className="text-sm font-semibold text-yellow-300">Username</label>
-              <input
-                type="text"
-                value={username}
-                onChange={(e) => setUsername(e.target.value)}
-                className="w-full bg-gray-800 text-white placeholder-indigo-300 px-4 py-2 rounded border border-indigo-700"
-              />
-            </div>
 
             <div className="flex gap-4">
               <div className="w-1/2">
                 <label className="text-sm font-semibold text-yellow-300">First Name</label>
                 <input
-                  type="text"
-                  value={firstName}
-                  onChange={(e) => setFirstName(e.target.value)}
+                  name="firstName"
+                  value={formData.firstName}
+                  onChange={handleChange}
+                  placeholder="First Name"
                   className="w-full bg-gray-800 text-white placeholder-indigo-300 px-4 py-2 rounded border border-indigo-700"
                 />
               </div>
               <div className="w-1/2">
                 <label className="text-sm font-semibold text-yellow-300">Last Name</label>
                 <input
-                  type="text"
-                  value={lastName}
-                  onChange={(e) => setLastName(e.target.value)}
+                  name="lastName"
+                  value={formData.lastName}
+                  onChange={handleChange}
+                  placeholder="Last Name"
                   className="w-full bg-gray-800 text-white placeholder-indigo-300 px-4 py-2 rounded border border-indigo-700"
                 />
               </div>
             </div>
-
             <div>
               <label className="text-sm font-semibold text-yellow-300">Email</label>
               <input
+                name="email"
                 type="email"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
+                value={formData.email}
+                onChange={handleChange}
+                placeholder="Email"
                 className="w-full bg-gray-800 text-white placeholder-indigo-300 px-4 py-2 rounded border border-indigo-700"
               />
             </div>
-
             <div>
               <label className="text-sm font-semibold text-yellow-300">Profile Picture</label>
               <div

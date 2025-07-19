@@ -12,8 +12,8 @@ const getMonacoLanguage = (lang) => {
   switch (lang) {
     case 'cpp': return 'cpp';
     case 'py': return 'python';
-    case 'java': return 'java';
-    case 'js': return 'javascript';
+    // case 'java': return 'java';
+    // case 'js': return 'javascript';
     case 'c': return 'c';
     default: return 'plaintext';
   }
@@ -56,7 +56,7 @@ const CodeIDE = () => {
         localStorage.setItem('fall_back_page', paths.CODEIDE);
         navigate(paths.LOGIN);
       }
-    };
+    };   
     checkAuth();
   }, []);
 
@@ -147,10 +147,10 @@ const CodeIDE = () => {
                   className="bg-gray-800 border border-gray-700 text-yellow-300 px-4 py-2 rounded-md w-full md:w-64 focus:outline-none focus:ring-2 focus:ring-yellow-400"
                 >
                   <option value="cpp">C++</option>
-                  <option value="py">Python</option>
-                  <option value="java">Java</option>
-                  <option value="js">JavaScript</option>
+                  {/* <option value="java">Java</option>
+                  <option value="js">JavaScript</option> */}
                   <option value="c">C</option>
+                  <option value="py">Python</option>
                 </select>
               </div>
 

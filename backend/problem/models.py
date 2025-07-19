@@ -58,7 +58,7 @@ class Solution(models.Model):
     )
     submittedAt = models.DateTimeField(auto_now_add=True)
     verdict = models.CharField(max_length=30)   # --> accepted,wrong answer,memory/time limit exceeded,run time error
-    language = models.CharField(max_length = 10)  # c,cpp,python,java
+    language = models.CharField(max_length = 10)  # c,cpp,python
     success = models.BooleanField(default=False)
     runtime = models.FloatField(default=0)
     def __str__(self):

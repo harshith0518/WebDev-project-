@@ -14,8 +14,8 @@ const getMonacoLanguage = (lang) => {
   switch (lang) {
     case 'cpp': return 'cpp';
     case 'py': return 'python';
-    case 'java': return 'java';
-    case 'js': return 'javascript';
+    // case 'java': return 'java';
+    // case 'js': return 'javascript';
     case 'c': return 'c';
     default: return 'plaintext';
   }
@@ -26,7 +26,7 @@ const CodeSolution = () => {
   const location = useLocation();
   const { id } = useParams();
   const [language, setLanguage] = useState('cpp');
-  const [code, setCode] = useState('// Write your knight path algorithm here...');
+  const [code, setCode] = useState(localStorage.getItem(`pb${id}-${language}`) || '// Write your knight path algorithm here...');
   const [themeReady, setThemeReady] = useState(false);
   const [problem, setProblem] = useState(null);
   const [input, setInput] = useState('');
@@ -147,20 +147,20 @@ const CodeSolution = () => {
     }
   };
 
-  useEffect(() => {
-    const handleKeyDown = (e) => {
-      if (e.ctrlKey && e.key === "'") {
-        e.preventDefault();
-        handleRunCode(e);
-      }
-      if (e.ctrlKey && e.key === 'Enter') {
-        e.preventDefault();
-        handleSubmitCode();
-      }
-    };
-    window.addEventListener('keydown', handleKeyDown);
-    return () => window.removeEventListener('keydown', handleKeyDown);
-  }, []);
+  
+   // 1. Load from localStorage on id or language change
+useEffect(() => {
+  const savedCode = localStorage.getItem(`pb${id}-${language}`);
+  if (savedCode !== null) {
+    setCode(savedCode);
+  } else {
+    setCode('// Write your knight path algorithm here...');
+  }
+}, [id, language]);
+
+useEffect(() => {
+  localStorage.setItem(`pb${id}-${language}`, code);
+}, [code, id, language]);
 
   const monaco = useMonaco();
 
@@ -199,7 +199,33 @@ const CodeSolution = () => {
     <Navbar />
     <div className="relative h-11/12 bg-gradient-to-br from-gray-900 via-indigo-950 to-yellow-400 text-white font-mono">
       
-      <Split className="flex h-[calc(100vh-60px)]" minSize={320} cursor="col-resize">
+      <style>
+        {`
+          .gutter {
+            background-color: transparent;
+            transition: background-color 0.2s ease;
+            cursor: col-resize;
+            width: 4px;
+          }
+
+          .gutter:hover {
+            background-color: rgba(255, 255, 255, 0.2);
+          }
+        `}
+      </style>
+
+      <Split
+        className="flex h-[calc(100vh-60px)]"
+        minSize={320}
+        gutterSize={8}
+        gutterAlign="center"
+        gutter={(index, direction) => {
+          const gutter = document.createElement('div');
+          gutter.className = `gutter gutter-${direction}`;
+          return gutter;
+        }}
+      >
+
         {/* LEFT: Problem Section */}
         <div className="overflow-y-auto p-6 border-r border-gray-800 bg-gray-900 h-full scrollbar-thin scrollbar-thumb-indigo-900 scrollbar-track-gray-800 hover:scrollbar-thumb-yellow-500">
           {!problem ? (
@@ -264,8 +290,8 @@ const CodeSolution = () => {
                 <option value="cpp">C++</option>
                 <option value="c">C</option>
                 <option value="py">Python</option>
-                <option value="java">Java</option>
-                <option value="js">Javascript</option>
+                {/* <option value="java">Java</option> */}
+                {/* <option value="js">Javascript</option> */}
               </select>
             </div>
 
@@ -293,27 +319,23 @@ const CodeSolution = () => {
             )}
 
             <div className="grid grid-cols-2 gap-4">
-              <div className="border border-gray-700 rounded-md overflow-hidden">
-                <div className="bg-gray-800 px-4 py-2 border-b border-gray-700">
-                  <span className="text-yellow-400 font-bold">📥 input.txt</span>
-                </div>
+              <div>
+                <h2 className="text-yellow-300 font-semibold text-lg mb-2">📥 input.txt</h2>
                 <textarea
-                  className="w-full h-28 bg-gray-900 text-indigo-200 p-3 outline-none text-sm resize-none font-mono"
                   value={input}
                   onChange={(e) => setInput(e.target.value)}
+                  className="w-full min-h-30 bg-gray-800 text-indigo-200 p-3 text-sm rounded-md font-mono resize-y overflow-auto"
                 />
               </div>
 
-              <div className="border border-gray-700 rounded-md overflow-hidden">
-                <div className="bg-gray-800 px-4 py-2 border-b border-gray-700">
-                  <span className="text-yellow-400 font-bold">📤 output.txt</span>
+              <div className="flex-1">
+                  <h2 className="text-yellow-300 font-semibold text-lg mb-2">📤 output.txt</h2>
+                  <textarea
+                    value={output}
+                    readOnly
+                    className="w-full min-h-30 bg-gray-800 text-green-400 p-3 text-sm rounded-md font-mono resize-y overflow-auto"
+                  />
                 </div>
-                <textarea
-                  className="w-full h-28 bg-gray-900 text-green-400 p-3 text-sm resize-none font-mono"
-                  value={output}
-                  readOnly
-                />
-              </div>
             </div>
 
             <div className="text-center py-4 bg-black/40 text-yellow-300 font-semibold text-lg shadow-inner rounded-md">

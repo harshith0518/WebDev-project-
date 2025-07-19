@@ -43,7 +43,6 @@ const Problems = () => {
     setCurrentPage(1);
   };
 
-  // ✅ Fetch if user is staff
   useEffect(() => {
     const getIsStaff = async () => {
       try {
@@ -63,8 +62,7 @@ const Problems = () => {
         console.error('Failed to check is_staff:', err);
       }
     };
-
-    getIsStaff(); // 🟢 ACTUALLY CALLING IT!
+    getIsStaff();
   }, [navigate]);
 
   // ✅ Fetch all problems
@@ -116,20 +114,22 @@ const Problems = () => {
           </div>
         ))}
 
-        <h1 className="text-4xl font-bold text-center text-yellow-400 mb-10 drop-shadow z-30 relative">
-          Problems to Conquer
-        </h1>
+        <div className="flex flex-col sm:flex-row items-center justify-between mb-10 z-30 relative max-w-5xl mx-auto">
+          <h1 className="text-4xl font-bold text-yellow-400 drop-shadow text-center sm:text-left mb-4 sm:mb-0">
+            Problems to Conquer
+          </h1>
 
-        {isStaff && (
-          <div className="z-30 relative flex justify-center mb-4">
+          {isStaff && (
             <button
               onClick={() => navigate(paths.ADDPROBLEM)}
               className="bg-yellow-500 hover:bg-yellow-600 text-black px-6 py-2 font-semibold rounded-xl transition"
             >
               ➕ Add New Problem
             </button>
-          </div>
-        )}
+          )}
+        </div>
+
+
 
         <div className="z-30 relative mb-6 max-w-5xl mx-auto flex flex-col md:flex-row justify-between items-center gap-4">
           <input

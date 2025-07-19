@@ -3,18 +3,45 @@ import axios from 'axios';
 import Navbar from './Navbar';
 import { useNavigate } from 'react-router-dom';
 import { getValidAccessToken } from '../authUtils/getValidAccessToken';
+import paths from '../paths';
 
 const ProblemSets = () => {
   const [sets, setSets] = useState([]);
   const [search, setSearch] = useState('');
   const [perPage, setPerPage] = useState(5);
   const [currentPage, setCurrentPage] = useState(1);
+  const [isStaff,setIsStaff] = useState(false);
   const navigate = useNavigate();
+
+
+  useEffect( () => {
+    const getIsStaff = async () => {
+      const token = await getValidAccessToken();
+      if(!token) 
+      {
+        localStorage.setItem('fall_back_page',paths.PROBLEMSETS);
+        navigate(paths.LOGIN);
+      }
+      try {
+        const res = await axios.get('http://localhost:8000/user/is_staff/',{
+          headers: {Authorization:`Bearer ${token}`},
+        });
+        setIsStaff(res.data.is_staff);
+      } catch (err) {
+        console.error('Error getting the staff verification');
+      }
+    };
+    getIsStaff();
+  },[]);
 
   useEffect(() => {
     const fetchSets = async () => {
       const token = await getValidAccessToken();
-      if (!token) return navigate('/login');
+      if(!token) 
+      {
+        localStorage.setItem('fall_back_page',location.pathname);
+        navigate(paths.LOGIN);
+      }
       try {
         const res = await axios.get('http://localhost:8000/problems/problem-sets/', {
           headers: { Authorization: `Bearer ${token}` }
@@ -67,7 +94,16 @@ const ProblemSets = () => {
       </div>
 
       <div className="relative z-20 max-w-4xl mx-auto h-[85vh] mt-4 p-6 bg-black/30 border border-yellow-700 rounded-xl overflow-y-auto scrollbar-thin scrollbar-thumb-yellow-600 scrollbar-track-black">
-        <h1 className="text-3xl font-bold text-yellow-400 mb-4 text-center">Problem Sets</h1>
+        <div className="mb-4 flex flex-col sm:flex-row sm:items-center sm:justify-between">
+          <h1 className="text-3xl font-bold text-yellow-400 text-center sm:text-left">Problem Sets</h1>
+          {isStaff && <button
+            onClick={() => navigate(paths.ADDPROBLEMSETS)}
+            className="mt-3 sm:mt-0 px-4 py-2 bg-yellow-500 text-black font-semibold rounded hover:bg-yellow-400 transition"
+          >
+            ➕ Add Problem Set
+          </button>}
+        </div>
+
 
         {/* Search + Per Page */}
         <div className="flex flex-col md:flex-row md:items-center md:justify-between mb-4 gap-3">

@@ -1,9 +1,6 @@
 from rest_framework.serializers import ModelSerializer
 from problem.models import Problem,Solution,ProblemSet
-from django.contrib.auth import get_user_model
-from django.contrib.auth.models import User
 from user.serializers import forNavbarSerializer
-User = get_user_model()
 
 class ProblemsListSerializer(ModelSerializer):
     class Meta:

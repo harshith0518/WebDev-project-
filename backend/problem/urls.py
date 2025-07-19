@@ -1,5 +1,5 @@
-from django.urls import path,include
-from problem.views import RunCodeAPIView,ProblemsListAPIView,getProblem,SubmitCodeAPIView,AddProblemAPIView,getProblemSetAPIView,getProblemSetsAPIView,getSolutionsListAPIView,getUserSolutionsAPIView,showSolutionDetailAPIView ,addProblemSetAPIView
+from django.urls import path
+from problem.views import RunCodeAPIView,ProblemsListAPIView,getProblem,SubmitCodeAPIView,AddProblemAPIView,getProblemSetAPIView,getProblemSetsAPIView,getSolutionsListAPIView,getUserSolutionsAPIView ,addProblemSetAPIView,ShowSolutionDetailAPIView
 
 urlpatterns = [
     path('run/',RunCodeAPIView.as_view(),name = 'run-code'),
@@ -12,6 +12,6 @@ urlpatterns = [
     path('problem-sets/<int:id>/',getProblemSetAPIView.as_view(),name = 'problem-set-detail'),
     path('solutions/all/',getSolutionsListAPIView.as_view(),name = 'global-solutions'),
     path('solutions/user-solutions/<int:id>/',getUserSolutionsAPIView.as_view(),name = 'user-solutions'),
-    path('solutions/solution/<int:id>/',showSolutionDetailAPIView.as_view(),name = 'solution-detail'),
+    path('solutions/solution/<int:id>/',ShowSolutionDetailAPIView.as_view(),name = 'solution-detail'),
 
 ]

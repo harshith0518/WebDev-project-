@@ -40,7 +40,7 @@ def compile_code(lang, code):
 
         return {
             'success': True,
-            # 'executable_path': os.path.join(temp_dir, unique_id + '.exe'),
+            # 'executable_path': os.path.join(temp_dir, unique_id + '.exe'),  for the localhost
             'executable_path': os.path.join(temp_dir, unique_id),   #  for the docker
             'temp_dir': temp_dir
         }

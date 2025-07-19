@@ -5,14 +5,14 @@ import { useNavigate, useParams } from 'react-router-dom';
 import paths from '../paths';
 import { getValidAccessToken } from '../authUtils/getValidAccessToken';
 import axios from 'axios';
-import UserSolutions from './UserSolutions'; // 👈 Reused for Submissions tab
+import UserSolutions from './UserSolutions';
 
 const UserProfile = () => {
   const navigate = useNavigate();
   const { id } = useParams();
   const [viewUser, setViewUser] = useState(null);
-  const [activeTab, setActiveTab] = useState('profile'); // profile | submissions
-
+  const [activeTab, setActiveTab] = useState('profile');
+  
   useEffect(() => {
     const fetchProfile = async () => {
       try {
@@ -33,9 +33,8 @@ const UserProfile = () => {
     };
     fetchProfile();
   }, [id, navigate]);
-
   const handleLogoutClick = () => navigate(paths.LOGOUT);
-  // const handleEditProfileClick = () => navigate(`/profile/${id}/edit`);
+  const handleEditProfileClick = () => navigate(`/profile/${id}/edit`);
 
   if (!viewUser) return <div className="text-white text-center mt-10">Loading...</div>;
 
@@ -45,7 +44,6 @@ const UserProfile = () => {
       <div className="min-h-screen bg-gradient-to-br from-gray-900 via-indigo-950 to-yellow-400 text-white font-mono p-6">
         <div className="max-w-6xl mx-auto bg-[#1e1b4b] border border-indigo-800 rounded-3xl shadow-2xl p-8 space-y-8">
           
-          {/* Tabs */}
           <div className="flex space-x-4 border-b border-indigo-600 pb-2 mb-4">
             <button
               onClick={() => setActiveTab('profile')}
@@ -69,13 +67,11 @@ const UserProfile = () => {
             </button>
           </div>
 
-          {/* Tab Content */}
           {activeTab === 'profile' ? (
             <>
-              {/* Profile Info */}
               <div className="flex flex-col md:flex-row items-center md:items-start gap-8">
                 <img
-                  src={`http://localhost:8000${viewUser.profile_pic}`}
+                  src={user.profile_pic?`http://localhost:8000${viewUser.profile_pic}`:'BatmanDefaultPic.webp'}
                   alt="Profile"
                   className="w-36 h-36 rounded-full border-4 border-yellow-400 shadow-xl"
                 />
@@ -90,11 +86,11 @@ const UserProfile = () => {
                     })}
                   </p>
                   <div className="mt-4 space-x-4">
-                    {/* <button 
+                    {viewUser.id == id && <button 
                       onClick={handleEditProfileClick}
                       className="bg-indigo-800 hover:bg-indigo-900 text-white font-semibold px-5 py-2 rounded-xl shadow-lg transition">
                       ✏️ Edit Profile
-                    </button> */}
+                    </button>}
                     <button 
                       onClick={handleLogoutClick}
                       className="bg-red-600 hover:bg-red-700 text-white font-semibold px-5 py-2 rounded-xl shadow-lg transition">

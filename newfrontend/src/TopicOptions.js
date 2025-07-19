@@ -13,6 +13,4 @@ const topicOptions = [
   { value: 'Binary Search', label: 'Binary Search' },
 ];
 
-
-
 export default topicOptions;

@@ -158,14 +158,18 @@ class getUserSolutionsAPIView(APIView):
         except Exception as e:
             return Response({'error': str(e)}, status=500)
 
-class showSolutionDetailAPIView(APIView):
+
+class ShowSolutionDetailAPIView(APIView):
     authentication_classes = [JWTAuthentication]
     permission_classes = [IsAuthenticated]
-    def get(self,request,id):
-        solution = Solution.objects.get(id = id)
-        serializer = SolutionDetailSerializer(solution)
-        return Response(serializer)
+    def get(self, request, id):
+        try:
+            solution = Solution.objects.get(id=id)
+        except Solution.DoesNotExist:
+            return Response({"error": "Solution not found"}, status=404)
 
+        serializer = SolutionDetailSerializer(solution)
+        return Response(serializer.data)
 
 class SubmitCodeAPIView(APIView):
     authentication_classes = [JWTAuthentication]

@@ -92,7 +92,6 @@ const Register = () => {
                 className="w-full px-4 py-2.5 rounded-md bg-gray-800 border border-indigo-600 focus:outline-none focus:ring-2 focus:ring-yellow-400 text-white placeholder-indigo-200 transition duration-300"
               />
             </div>
-
             <div>
               <label htmlFor="password" className="block mb-1 text-sm font-medium text-indigo-300">Password</label>
               <input

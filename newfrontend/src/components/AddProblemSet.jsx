@@ -3,10 +3,12 @@ import Select from 'react-select';
 import axios from 'axios';
 import Navbar from './Navbar';
 import { getValidAccessToken } from '../authUtils/getValidAccessToken';
+import customSelectStyles from '../customSelectStyles';
+
 
 function AddProblemSet() {
   const [problemSetTitle, setProblemSetTitle] = useState('');
-  const [difficultyLevel, setDifficultyLevel] = useState('');
+  const [difficultyLevel, setDifficultyLevel] = useState('Easy');
   const [topics, setTopics] = useState('');
   const [problems, setProblems] = useState([]);
   const [selectedProblems, setSelectedProblems] = useState([]);
@@ -58,7 +60,7 @@ function AddProblemSet() {
 
       alert('Problem Set Created Successfully!');
       setProblemSetTitle('');
-      setDifficultyLevel('');
+      setDifficultyLevel('Easy');
       setTopics('');
       setSelectedProblems([]);
     } catch (err) {
@@ -67,10 +69,10 @@ function AddProblemSet() {
   };
 
   return (
-    <div className="relative min-h-screen bg-black text-white overflow-hidden">
+    <>
       <Navbar />
-
-      {[...Array(12)].map((_, i) => (
+      <div className="relative min-h-[120vh] bg-gradient-to-br from-gray-900 via-indigo-950 to-yellow-900 text-white py-12 px-4">
+        {[...Array(12)].map((_, i) => (
           <div
             key={i}
             className="absolute text-yellow-400 opacity-10 animate-float z-10"
@@ -84,67 +86,76 @@ function AddProblemSet() {
             🦇
           </div>
         ))}
-      <div className="relative z-10 flex justify-center items-center pt-24 px-4">
-        <form
-          onSubmit={handleSubmit}
-          className="bg-gray-900 bg-opacity-90 backdrop-blur p-8 rounded-2xl shadow-2xl w-full max-w-3xl space-y-6 border border-yellow-500"
-        >
-          <h2 className="text-3xl font-bold text-yellow-400 text-center">Create a New Problem Set</h2>
 
-          <div>
-            <label className="block mb-1 text-sm font-semibold text-yellow-300">Problem Set Title</label>
-            <input
-              type="text"
-              value={problemSetTitle}
-              onChange={(e) => setProblemSetTitle(e.target.value)}
-              required
-              className="w-full px-4 py-2 rounded-xl bg-gray-800 text-white border border-gray-600 focus:outline-none focus:ring-2 focus:ring-yellow-500"
-            />
-          </div>
+        <div className="relative z-20 max-w-2xl mx-auto bg-black bg-opacity-60 backdrop-blur p-8 rounded-2xl shadow-lg border border-yellow-700">
+          <h2 className="text-3xl font-bold mb-6 text-yellow-400 text-center">📚 Create a New Problem Set</h2>
 
-          <div>
-            <label className="block mb-1 text-sm font-semibold text-yellow-300">Difficulty Level</label>
-            <input
-              type="text"
-              value={difficultyLevel}
-              onChange={(e) => setDifficultyLevel(e.target.value)}
-              required
-              className="w-full px-4 py-2 rounded-xl bg-gray-800 text-white border border-gray-600 focus:outline-none focus:ring-2 focus:ring-yellow-500"
-            />
-          </div>
+          <form onSubmit={handleSubmit} className="space-y-4">
 
-          <div>
-            <label className="block mb-1 text-sm font-semibold text-yellow-300">Topics (comma-separated)</label>
-            <input
-              type="text"
-              value={topics}
-              onChange={(e) => setTopics(e.target.value)}
-              required
-              className="w-full px-4 py-2 rounded-xl bg-gray-800 text-white border border-gray-600 focus:outline-none focus:ring-2 focus:ring-yellow-500"
-            />
-          </div>
+            {/* Problem Set Title */}
+            <div>
+              <label className="text-sm font-semibold text-yellow-300">Problem Set Title</label>
+              <input
+                type="text"
+                value={problemSetTitle}
+                onChange={(e) => setProblemSetTitle(e.target.value)}
+                required
+                placeholder="Enter title..."
+                className="w-full bg-gray-800 text-white placeholder-indigo-300 px-4 py-2 rounded border border-indigo-700"
+              />
+            </div>
 
-          <div>
-            <label className="block mb-1 text-sm font-semibold text-yellow-300">Select Problems</label>
-            <Select
-              options={problems}
-              isMulti
-              value={selectedProblems}
-              onChange={setSelectedProblems}
-              className="text-black bg-white rounded-md"
-              classNamePrefix="select"
-            />
-          </div>
+            {/* Difficulty Level */}
+            <div>
+              <label className="text-sm font-semibold text-yellow-300">Difficulty Level</label>
+              <select
+                value={difficultyLevel}
+                onChange={(e) => setDifficultyLevel(e.target.value)}
+                className="w-full bg-gray-800 text-yellow-300 px-4 py-2 rounded border border-indigo-700"
+              >
+                <option value="Easy">🟢 Easy</option>
+                <option value="Medium">🟡 Medium</option>
+                <option value="Hard">🔴 Hard</option>
+              </select>
+            </div>
 
-          <button
-            type="submit"
-            className="w-full py-3 px-4 bg-yellow-500 hover:bg-yellow-600 text-black font-bold rounded-xl transition duration-200"
-          >
-            Create Problem Set
-          </button>
-        </form>
+            {/* Topics */}
+            <div>
+              <label className="text-sm font-semibold text-yellow-300">Topics (comma-separated)</label>
+              <input
+                type="text"
+                value={topics}
+                onChange={(e) => setTopics(e.target.value)}
+                required
+                placeholder="e.g. Arrays, Trees"
+                className="w-full bg-gray-800 text-white placeholder-indigo-300 px-4 py-2 rounded border border-indigo-700"
+              />
+            </div>
+
+            {/* Select Problems */}
+            <div>
+              <label className="text-sm font-semibold text-yellow-300">Select Problems</label>
+              <Select
+                options={problems}
+                isMulti
+                value={selectedProblems}
+                onChange={setSelectedProblems}
+                styles={customSelectStyles}
+                placeholder="Search & select problems..."
+              />
+            </div>
+
+            {/* Submit Button */}
+            <button
+              type="submit"
+              className="w-full py-3 bg-indigo-600 hover:bg-yellow-400 text-white hover:text-black font-bold rounded-md transition duration-300"
+            >
+              ➕ Create Problem Set
+            </button>
+          </form>
+        </div>
       </div>
-    </div>
+    </>
   );
 }
 

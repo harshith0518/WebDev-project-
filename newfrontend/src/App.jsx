@@ -20,6 +20,7 @@ import AddProblem from './components/AddProblem'
 import ProblemSets from './components/ProblemSets'
 import ProblemSetDetail from './components/ProblemSetDetail'
 import AddProblemSet from './components/AddProblemSet'
+import ViewSolution from './components/ViewSolution'
 
 
 function App() {
@@ -41,11 +42,12 @@ function App() {
     <Route path={paths.LOGOUT} element={<Logout/>}/>
     <Route path={paths.LEADERBOARD} element={<Leaderboard/>}/>
     <Route path={paths.SOLUTIONS} element={<Solutions/>}/>
+    <Route path={`solutions/:id/solution`} element={<ViewSolution/>}/>
     <Route path={paths.CONTESTS} element={<Contests/>}/>
     <Route path={paths.ADDPROBLEM} element={<AddProblem/>}/>
     <Route path={paths.PROBLEMSETS} element={<ProblemSets/>}/>
     <Route path={`problem-sets/:id/problem-set`} element={<ProblemSetDetail/>}/>
-    <Route path={`problem-sets/add-set`} element={<AddProblemSet/>}/>
+    <Route path={paths.ADDPROBLEMSETS} element={<AddProblemSet/>}/>
     </Routes>
     </BrowserRouter>
   )
