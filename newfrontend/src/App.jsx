@@ -5,7 +5,6 @@ import Login from './components/Login'
 import Home from './components/Home'
 import Register from './components/Register'
 import Problems from './components/Problems';
-import Navbar from './components/Navbar'
 import { BrowserRouter, Route,Routes } from 'react-router-dom'
 import paths from './paths'
 import CodeIDE from './components/CodeIDE'

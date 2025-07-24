@@ -1,9 +1,9 @@
-from django.urls import path,include
-from home.views import show_preface
+from django.urls import path
+from home.views import homeRequirementsAPIView
 
 
 urlpatterns = [
-    path('preface/',show_preface,name = 'preface-home'),
+    path('',homeRequirementsAPIView.as_view(),name = 'home'),
 ]
 
 

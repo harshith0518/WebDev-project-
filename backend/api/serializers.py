@@ -17,12 +17,14 @@ class UserLoginSerializer(serializers.Serializer):
         if user:
             if user.check_password(password):
                 refresh = RefreshToken.for_user(user)
+                user_id = user.id
                 return {
                     "email": user.email,
                     "tokens": {
                         "refresh": str(refresh),
                         "access": str(refresh.access_token),
                     },
+                    "user_id":user.id,
                 }
             else:
                 raise serializers.ValidationError("Incorrect password.")

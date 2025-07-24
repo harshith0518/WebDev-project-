@@ -12,7 +12,8 @@ const UserProfile = () => {
   const { id } = useParams();
   const [viewUser, setViewUser] = useState(null);
   const [activeTab, setActiveTab] = useState('profile');
-  
+  const current_user_id = localStorage.getItem('userId');
+  console.log(current_user_id);
   useEffect(() => {
     const fetchProfile = async () => {
       try {
@@ -71,7 +72,7 @@ const UserProfile = () => {
             <>
               <div className="flex flex-col md:flex-row items-center md:items-start gap-8">
                 <img
-                  src={user.profile_pic?`http://localhost:8000${viewUser.profile_pic}`:'BatmanDefaultPic.webp'}
+                  src={viewUser.profile_pic?`http://localhost:8000${viewUser.profile_pic}`:'BatmanDefaultPic.webp'}
                   alt="Profile"
                   className="w-36 h-36 rounded-full border-4 border-yellow-400 shadow-xl"
                 />
@@ -86,7 +87,7 @@ const UserProfile = () => {
                     })}
                   </p>
                   <div className="mt-4 space-x-4">
-                    {viewUser.id == id && <button 
+                    {viewUser.id == current_user_id && <button 
                       onClick={handleEditProfileClick}
                       className="bg-indigo-800 hover:bg-indigo-900 text-white font-semibold px-5 py-2 rounded-xl shadow-lg transition">
                       ✏️ Edit Profile

@@ -31,6 +31,12 @@ class Problem(models.Model):
         if (self.totalAccepted+self.totalRejected == 0): return '100%'
         else: return f'{self.totalAccepted/(self.totalRejected+self.totalAccepted):.2f}%'
 
+class LatestCodeForProblem(models.Model):
+    code = models.TextField(default = '')
+    language = models.CharField(default='cpp')
+    problem = models.ForeignKey(Problem,on_delete=models.CASCADE,related_name='latestCode')
+    def __str__(self):
+        return f'pb{self.problem.id} {self.language} latest code'
 
 class Testcase(models.Model):
     input_file = models.FileField(upload_to='testcases/inputs/',null = True,blank = True)

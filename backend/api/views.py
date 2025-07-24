@@ -16,7 +16,6 @@ User = get_user_model()
 class UserLogoutAPIView(APIView):
     authentication_classes = [JWTAuthentication]
     permission_classes = [IsAuthenticated]
-
     def post(self, request):
         refresh_token = request.data.get("refresh")
         if not refresh_token:
@@ -35,7 +34,6 @@ class UserLoginAPIView(generics.GenericAPIView):
     authentication_classes = []
     permission_classes = []
     serializer_class = UserLoginSerializer
-
     def post(self, request):
         serializer = self.get_serializer(data=request.data)
         serializer.is_valid(raise_exception=True)

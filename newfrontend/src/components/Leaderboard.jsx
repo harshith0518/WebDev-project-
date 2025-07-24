@@ -3,7 +3,12 @@ import axios from 'axios';
 import Navbar from './Navbar';
 import { getValidAccessToken } from '../authUtils/getValidAccessToken';
 import paths from '../paths';
+import { useNavigate } from 'react-router-dom';
+
+
+
 function Leaderboard() {
+  const navigate = useNavigate();
   const [searchTerm, setSearchTerm] = useState('');
   const [users, setUsers] = useState([]);
 
@@ -71,7 +76,14 @@ function Leaderboard() {
                       key={index}
                       className="border-t border-gray-700 hover:bg-indigo-900 transition duration-200 text-sm"
                     >
-                      <td className="px-4 py-2">{user.username}</td>
+                      <td className="px-4 py-2">
+                      <span
+                          onClick={() => navigate(`/profile/${user.id}`)}
+                          className="text-blue-400 hover:text-yellow-300 cursor-pointer underline"
+                        >
+                          {user.username}
+                        </span>
+                      </td>
                       <td className="text-center">{user.Easy_solved}</td>
                       <td className="text-center">{user.Medium_solved}</td>
                       <td className="text-center">{user.Hard_solved}</td>

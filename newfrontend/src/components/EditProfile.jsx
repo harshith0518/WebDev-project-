@@ -3,18 +3,20 @@ import axios from 'axios';
 import { getValidAccessToken } from '../authUtils/getValidAccessToken';
 import { useNavigate, useParams } from 'react-router-dom';
 import Navbar from './Navbar';
+import paths from '../paths';
 
 const EditProfile = () => {
   const { id } = useParams();
+  const navigate = useNavigate();
+
   const [formData, setFormData] = useState({
-    firstName: '',
-    lastName: '',
+    first_name: '',
+    last_name: '',
     email: '',
   });
+
   const [profilePic, setProfilePic] = useState(null);
   const [previewPic, setPreviewPic] = useState(null);
-  
-  const navigate = useNavigate();
 
   useEffect(() => {
     const fetchProfile = async () => {
@@ -23,16 +25,19 @@ const EditProfile = () => {
         const response = await axios.get(`http://localhost:8000/user/profile/${id}/`, {
           headers: { Authorization: `Bearer ${token}` },
         });
-        const data = response.data;
 
+        const data = response.data;
         setFormData({
-          firstName: data.first_name || '',
-          lastName: data.last_name || '',
+          first_name: data.first_name || '',
+          last_name: data.last_name || '',
           email: data.email || '',
         });
 
         if (data.profile_pic) {
-          setPreviewPic(data.profile_pic);
+          const fullUrl = data.profile_pic.startsWith('http')
+            ? data.profile_pic
+            : `http://localhost:8000${data.profile_pic}`;
+          setPreviewPic(fullUrl);
         }
       } catch (error) {
         console.error('Error fetching profile:', error);
@@ -50,8 +55,13 @@ const EditProfile = () => {
   const handleImageChange = (e) => {
     const file = e.target.files[0];
     if (file) {
+      if (!file.type.startsWith('image/')) {
+        alert('Only image files are allowed!');
+        return;
+      }
       setProfilePic(file);
       setPreviewPic(URL.createObjectURL(file));
+      console.log("Selected file:", file);
     }
   };
 
@@ -59,32 +69,53 @@ const EditProfile = () => {
     e.preventDefault();
     const file = e.dataTransfer.files[0];
     if (file) {
+      if (!file.type.startsWith('image/')) {
+        alert('Only image files are allowed!');
+        return;
+      }
       setProfilePic(file);
       setPreviewPic(URL.createObjectURL(file));
+      console.log("Dropped file:", file);
     }
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     const token = await getValidAccessToken();
-    const data = new FormData();
+    if (!token) {
+      localStorage.setItem('fall_back_page', paths.EDITPROFILE);
+      navigate(paths.LOGIN);
+      return;
+    }
 
+    const data = new FormData();
     Object.entries(formData).forEach(([key, value]) => {
-      data.append(key, value);
+      if (value !== undefined && value !== null) {
+        data.append(key, value);
+      }
     });
-    if (profilePic) data.append('profile_pic', profilePic);
+
+    if (profilePic instanceof File) {
+      data.append('profile_pic', profilePic);
+    } else {
+      console.warn('No valid file selected for profile_pic');
+    }
+
+    for (const pair of data.entries()) {
+      console.log(pair[0], pair[1]); // For debugging
+    }
 
     try {
-      await axios.patch('/api/user/change-profile/', data, {
+      await axios.patch('http://localhost:8000/user/change-profile/', data, {
         headers: {
           Authorization: `Bearer ${token}`,
-          'Content-Type': 'multipart/form-data',
+          // Do not manually set 'Content-Type'; axios will do it correctly for FormData
         },
       });
       alert('Profile updated successfully');
-      navigate('/profile');
+      navigate(`/profile/${id}`);
     } catch (error) {
-      console.error('Error updating profile:', error.response || error);
+      console.error('Error updating profile:', error.response?.data || error.message);
       alert('Failed to update profile');
     }
   };
@@ -112,13 +143,12 @@ const EditProfile = () => {
           <h2 className="text-3xl font-bold mb-6 text-yellow-400 text-center">🛠️ Edit Your Profile</h2>
 
           <form onSubmit={handleSubmit} className="space-y-4">
-
             <div className="flex gap-4">
               <div className="w-1/2">
                 <label className="text-sm font-semibold text-yellow-300">First Name</label>
                 <input
-                  name="firstName"
-                  value={formData.firstName}
+                  name="first_name"
+                  value={formData.first_name}
                   onChange={handleChange}
                   placeholder="First Name"
                   className="w-full bg-gray-800 text-white placeholder-indigo-300 px-4 py-2 rounded border border-indigo-700"
@@ -127,14 +157,15 @@ const EditProfile = () => {
               <div className="w-1/2">
                 <label className="text-sm font-semibold text-yellow-300">Last Name</label>
                 <input
-                  name="lastName"
-                  value={formData.lastName}
+                  name="last_name"
+                  value={formData.last_name}
                   onChange={handleChange}
                   placeholder="Last Name"
                   className="w-full bg-gray-800 text-white placeholder-indigo-300 px-4 py-2 rounded border border-indigo-700"
                 />
               </div>
             </div>
+
             <div>
               <label className="text-sm font-semibold text-yellow-300">Email</label>
               <input
@@ -146,6 +177,7 @@ const EditProfile = () => {
                 className="w-full bg-gray-800 text-white placeholder-indigo-300 px-4 py-2 rounded border border-indigo-700"
               />
             </div>
+
             <div>
               <label className="text-sm font-semibold text-yellow-300">Profile Picture</label>
               <div

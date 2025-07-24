@@ -171,6 +171,17 @@ class ShowSolutionDetailAPIView(APIView):
         serializer = SolutionDetailSerializer(solution)
         return Response(serializer.data)
 
+class getLatestCodeAPIView(APIView):
+    authentication_classes = [JWTAuthentication]
+    permission_classes = [IsAuthenticated]
+    def get(self,request,id):
+        try:
+            problem = Problem.objects.get(id=id)
+            latestCode = problem.latestCode.get(language = request.data.get('language')).code
+            return latestCode
+        except Exception as e:
+            return Response({'error':str(e)},status=404)
+
 class SubmitCodeAPIView(APIView):
     authentication_classes = [JWTAuthentication]
     permission_classes = [IsAuthenticated]

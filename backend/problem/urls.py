@@ -1,5 +1,5 @@
 from django.urls import path
-from problem.views import RunCodeAPIView,ProblemsListAPIView,getProblem,SubmitCodeAPIView,AddProblemAPIView,getProblemSetAPIView,getProblemSetsAPIView,getSolutionsListAPIView,getUserSolutionsAPIView ,addProblemSetAPIView,ShowSolutionDetailAPIView
+from problem.views import RunCodeAPIView,ProblemsListAPIView,getProblem,SubmitCodeAPIView,AddProblemAPIView,getProblemSetAPIView,getProblemSetsAPIView,getSolutionsListAPIView,getUserSolutionsAPIView ,addProblemSetAPIView,ShowSolutionDetailAPIView,getLatestCodeAPIView
 
 urlpatterns = [
     path('run/',RunCodeAPIView.as_view(),name = 'run-code'),
@@ -13,5 +13,6 @@ urlpatterns = [
     path('solutions/all/',getSolutionsListAPIView.as_view(),name = 'global-solutions'),
     path('solutions/user-solutions/<int:id>/',getUserSolutionsAPIView.as_view(),name = 'user-solutions'),
     path('solutions/solution/<int:id>/',ShowSolutionDetailAPIView.as_view(),name = 'solution-detail'),
+    path('<int:id>/latest-code/',getLatestCodeAPIView.as_view(),name = 'problem-latest-code')
 
 ]
