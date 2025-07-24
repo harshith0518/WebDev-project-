@@ -1,6 +1,9 @@
 import React, { useState } from 'react';
 import Navbar from './Navbar.jsx';
 import '../App.css'
+import { useEffect } from 'react';
+import axios from 'axios';
+
 
 
 const Home = () => {
@@ -10,9 +13,19 @@ const Home = () => {
   const [totalProblems,setTotalProblems] = useState(0);
 
   useEffect(() => {
-    
-  })
-
+    const getVals = async () => {
+      try {
+        const response = await axios.get('http://localhost:8000/home/');
+        setTotalProblems(response.data.problemCnt);
+        setTotalUsers(response.data.userCnt);
+        setTotalSolutions(response.data.solutionCnt);
+      } catch (err) {
+        console.error("Error fetching counts:", err);
+      }
+    };
+    getVals();
+  }, []);
+  console.log(totalProblems,totalSolutions,totalUsers);
 
   return (
     <div className="relative min-h-screen bg-gray-900 text-white font-sans overflow-hidden">
@@ -31,13 +44,13 @@ const Home = () => {
 
         <div className="grid md:grid-cols-3 gap-6">
           {[
-            { type: 'Total Users', Value: 291 },
-            { type: 'Total Submissions', Value: 1298 },
-            { type: 'Total Problems', Value: 45 }
-          ].map(({ type, Value }) => (
-            <div key={type} className="bg-gray-900 p-5 rounded-xl text-center border-2 border-indigo-300 hover:bg-gray-800 transition">
-              <h4 className="text-lg font-bold text-yellow-300">{type}</h4>
-              <p className="text-gray-400 mt-2">Value: <span className="text-green-400">{Value}</span></p>
+            { type: 'Total Users', value: totalUsers },
+            { type: 'Total Submissions', value: totalSolutions },
+            { type: 'Total Problems', value: totalProblems },
+          ].map((counts) => (
+            <div key={counts.type} className="bg-gray-900 p-5 rounded-xl text-center border-2 border-indigo-300 hover:bg-gray-800 transition">
+              <h4 className="text-lg font-bold text-yellow-300">{counts.type}</h4>
+              <p className="text-gray-400 mt-2"><span className="text-green-400">{counts.value}</span></p>
             </div>
           ))}
         </div>
