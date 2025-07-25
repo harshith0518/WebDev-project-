@@ -1,5 +1,0 @@
-Traceback (most recent call last):
-  File "/app/media/Outputiles/5d2fddebd1064c9ea28c7ede9f2bc6a1.py", line 5, in <module>
-    arr = list(map(int,intput().split()))
-                       ^^^^^^
-NameError: name 'intput' is not defined. Did you mean: 'input'?

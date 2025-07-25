@@ -158,7 +158,17 @@ class getUserSolutionsAPIView(APIView):
         except Exception as e:
             return Response({'error': str(e)}, status=500)
 
-
+class getMyProblemSubmissionsAPIView(APIView):
+    authentication_classes = [JWTAuthentication]
+    permission_classes = [IsAuthenticated]
+    def get(self,request,id):
+        try:
+            solutions = Solution.objects.filter(user = request.user,problem__id = id).select_related("user","problem")
+            serializer = SolutionsSerializerList(solutions,many = True)
+            return Response(serializer.data)
+        except Exception as e:
+            return Response({'error':str(e)},status=500)
+    
 class ShowSolutionDetailAPIView(APIView):
     authentication_classes = [JWTAuthentication]
     permission_classes = [IsAuthenticated]

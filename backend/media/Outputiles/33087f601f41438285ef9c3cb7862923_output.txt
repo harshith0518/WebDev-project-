@@ -1,4 +1,0 @@
-  File "/app/media/Outputiles/585247e2a7b74a5a96d5873700e722e8.py", line 1
-    // Write your knight path algorithm here...
-    ^^
-SyntaxError: invalid syntax

@@ -7,7 +7,7 @@ import { getValidAccessToken } from '../authUtils/getValidAccessToken';
 import { useNavigate, useParams, useLocation } from 'react-router-dom';
 import paths from '../paths';
 import axios from 'axios';
-
+import ProblemSubmissionHistory from './ProblemSubmissionHistory';
 
 
 const getMonacoLanguage = (lang) => {
@@ -34,6 +34,7 @@ const CodeSolution = () => {
   const [verdict, setVerdict] = useState('---');
   const [runtime, setRuntime] = useState('---');
   const [isRunning, setIsRunning] = useState(false);
+  const [showSubmissionHistory,setShowSubmissionHistory] = useState(false);
 
   useEffect(() => {
   const controller = new AbortController();
@@ -60,14 +61,20 @@ const CodeSolution = () => {
       console.error("Error fetching problem:", err);
     }
   };
+    getProblem();
+    return () => {
+      controller.abort();
+    };
+  }, [id, location.pathname, navigate]);
 
-  getProblem();
-
-  return () => {
-    controller.abort();
-  };
-}, [id, location.pathname, navigate]);
-
+  const handleSolutionHistory = async () => {
+    const token = await getValidAccessToken();
+    if (!token) {
+      localStorage.setItem('fall_back_page',location.pathname);
+      navigate(paths.LOGIN);
+    }
+    setShowSubmissionHistory(true);
+  }
 
   const handleSubmitCode = async (e) => {
     e.preventDefault();
@@ -147,20 +154,18 @@ const CodeSolution = () => {
     }
   };
 
-  
-   // 1. Load from localStorage on id or language change
-useEffect(() => {
-  const savedCode = localStorage.getItem(`pb${id}-${language}`);
-  if (savedCode !== null) {
-    setCode(savedCode);
-  } else {
-    setCode('// Write your knight path algorithm here...');
-  }
-}, [id, language]);
+  useEffect(() => {
+    const savedCode = localStorage.getItem(`pb${id}-${language}`);
+    if (savedCode !== null) {
+      setCode(savedCode);
+    } else {
+      setCode('// Write your knight path algorithm here...');
+    }
+  }, [id, language]);
 
-useEffect(() => {
-  localStorage.setItem(`pb${id}-${language}`, code);
-}, [code, id, language]);
+  useEffect(() => {
+    localStorage.setItem(`pb${id}-${language}`, code);
+  }, [code, id, language]);
 
   const monaco = useMonaco();
 
@@ -363,6 +368,7 @@ useEffect(() => {
                 📤 Submit
               </button>
               <button
+                onClick={handleSolutionHistory}
                 className="bg-orange-400 text-black font-semibold px-4 py-2 rounded-md shadow hover:bg-indigo-900 hover:text-white hover:shadow-yellow-500/40 transition duration-300 ease-in-out text-sm"
               >
                 Check Solution History ⬇
@@ -372,6 +378,13 @@ useEffect(() => {
         </div>
       </Split>
     </div>
+        {showSubmissionHistory && (
+      <ProblemSubmissionHistory
+        problemId={id}
+        onClose={() => setShowSubmissionHistory(false)}
+      />
+    )}
+
     </>
   );
 };

@@ -1,6 +1,0 @@
-[1, 2, 3]
-Traceback (most recent call last):
-  File "/app/media/Outputiles/803ef4843c284712bfe6a69330d389d0.py", line 8, in <module>
-    for i in range(arr): sum+=i
-             ^^^^^^^^^^
-TypeError: 'list' object cannot be interpreted as an integer

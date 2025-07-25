@@ -5,7 +5,7 @@ from django.conf import settings
 
 def compile_code(lang, code):
     try:
-        temp_dir = os.path.join(settings.MEDIA_ROOT, 'Outputiles')
+        temp_dir = os.path.join(settings.MEDIA_ROOT, 'Outputfiles')
         os.makedirs(temp_dir, exist_ok=True)
 
         unique_id = uuid.uuid4().hex
