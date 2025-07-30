@@ -31,12 +31,13 @@ def compile_code(lang, code):
                 stdout=compile_out,
                 cwd=temp_dir
             )
-
+        
         if result.returncode != 0:
             with open(output_file_path, 'r') as f:
                 output_data = f.read()
             return {'success': False, 'output_data': output_data, 'verdict': 'Compilation Error'}
-
+        if os.path.exists(output_file_path):
+            os.remove(output_file_path)
         return {
             'success': True,
             # 'executable_path': os.path.join(temp_dir, unique_id + '.exe'),  for the localhost
@@ -44,6 +45,8 @@ def compile_code(lang, code):
             'temp_dir': temp_dir
         }
     except Exception as e:
+        if os.path.exists(output_file_path):
+            os.remove(output_file_path)
         return {'success': False, 'verdict': 'Internal Error', 'error': str(e)}
 
 

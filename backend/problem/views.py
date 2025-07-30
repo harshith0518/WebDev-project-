@@ -142,9 +142,7 @@ class getSolutionsListAPIView(APIView):
     permission_classes = [IsAuthenticated]
     def get(self,request):
         solutions = Solution.objects.all()
-        print(solutions)
         serializer = SolutionsSerializerList(solutions,many = True)
-        print(serializer)
         return Response(serializer.data)
 
 
@@ -213,10 +211,13 @@ class SubmitCodeAPIView(APIView):
         )
 
         compile_result = compile_code(lang, code)
+        executable_path = compile_result.get('executable_path')
         if not compile_result['success']:
             solution.verdict = compile_result['verdict']
             solution.success = False
             solution.save()
+            if executable_path and os.path.exists(executable_path):
+                os.remove(executable_path)
             return Response({
                 'verdict': solution.verdict,
                 'success': False,
@@ -224,7 +225,6 @@ class SubmitCodeAPIView(APIView):
                 'submittedAt':solution.submittedAt,
             }, status=200)
 
-        executable_path = compile_result['executable_path']
         temp_dir = compile_result['temp_dir']
         counter = 0
         max_runtime = 0
@@ -234,7 +234,6 @@ class SubmitCodeAPIView(APIView):
             try:
                 testcase.input_file.seek(0)
                 input_file_path = testcase.input_file.path
-                print("--->>>>>>>>>>>>> in the submit api view",input_file_path)
                 testcase.output_file.seek(0)
                 expected_output = testcase.output_file.read().decode().strip()
                 run_result = run_code(lang, executable_path, input_file_path, temp_dir)
@@ -297,8 +296,9 @@ class SubmitCodeAPIView(APIView):
         solution.success = True
         solution.runtime = max_runtime
         solution.save()
-        if executable_path and os.path.exists(executable_path):
-            os.remove(executable_path)
+        if executable_path and os.path.exists(executable_path+".exe"):
+            os.remove(executable_path+".exe")  # For localhost
+            # os.remove(executable_path)  # For docker
         return Response({
             'verdict': 'Accepted',
             'runtime': max_runtime,
@@ -314,13 +314,12 @@ class RunCodeAPIView(APIView):
         lang = request.data.get('language')
         code = request.data.get('code')
         input_data = request.data.get('input_data', '')
-
         compile_result = compile_code(lang, code)
         executable_path = compile_result.get('executable_path')
         if not compile_result['success']:
-            if executable_path and os.path.exists(executable_path):
-                os.remove(executable_path)
-            return Response(compile_result, status=400)
+            if executable_path and os.path.exists(executable_path+".exe"):
+                os.remove(executable_path+".exe")  # For localhost
+                # os.remove(executable_path)  # For docker
         temp_dir = compile_result['temp_dir']
         unique_id = uuid.uuid4().hex
         input_file_path = os.path.join(temp_dir, f'{unique_id}_input.txt')
@@ -331,7 +330,8 @@ class RunCodeAPIView(APIView):
         except Exception as e:
             print(str(e))
             return Response({'success': False, 'verdict': 'Internal Error', 'error': str(e),'output_data':str(e)}, status=500)
-        if executable_path and os.path.exists(executable_path):
-            os.remove(executable_path)
+        if executable_path and os.path.exists(executable_path+".exe"):
+            os.remove(executable_path+".exe")  # For localhost
+            # os.remove(executable_path)  # For docker
         os.remove(input_file_path)
         return Response(run_result)
