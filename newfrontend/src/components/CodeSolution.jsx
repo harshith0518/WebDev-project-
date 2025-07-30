@@ -48,7 +48,7 @@ const CodeSolution = () => {
         return;
       }
 
-      const response = await axios.get(`http://localhost:8000/problems/${id}/`, {
+      const response = await axios.get(paths.BASE+`problems/${id}/`, {
         headers: { Authorization: `Bearer ${token}` },
         signal: controller.signal,
       });
@@ -87,7 +87,7 @@ const CodeSolution = () => {
     }
     try {
       const submitResponse = await axios.post(
-        `http://localhost:8000/problems/submit/${id}/`,
+        paths.BASE+`problems/submit/${id}/`,
         {
           language,
           code,
@@ -129,7 +129,7 @@ const CodeSolution = () => {
     }
     try {
       const runResponse = await axios.post(
-        'http://localhost:8000/problems/run/',
+        paths.BASE+'problems/run/',
         {
           language,
           code,

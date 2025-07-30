@@ -22,7 +22,7 @@ const UserProfile = () => {
           navigate(paths.LOGIN);
           return;
         }
-        const response = await axios.get(`http://localhost:8000/user/profile/${id}/`, {
+        const response = await axios.get(paths.BASE+`user/profile/${id}/`, {
           headers: {
             Authorization: `Bearer ${token}`,
           },

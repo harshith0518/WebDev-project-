@@ -1,6 +1,3 @@
-import EditProfile from "./components/EditProfile";
-
-const baseURL = 'http://localhost:8000/';
 
 const paths = {
   LANDINGPAGE: '/',
@@ -18,6 +15,7 @@ const paths = {
   ADDPROBLEM: '/problems/add-problem',
   PROBLEMSETS: '/problem-sets',
   ADDPROBLEMSETS: '/problem-sets/add-set',
+  BASE : String(import.meta.env.VITE_API_BASE_URL)
 };
 
 export default paths;

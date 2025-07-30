@@ -24,7 +24,7 @@ const ContestDetail = () => {
       if (!token) return navigate('/login');
 
       try {
-        const res = await axios.get(`http://localhost:8000/contests/${id}/`, {
+        const res = await axios.get(paths.BASE+`contests/${id}/`, {
           headers: { Authorization: `Bearer ${token}` }
         });
         setContest(res.data);

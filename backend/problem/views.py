@@ -2,12 +2,13 @@ from problem.models import Problem,Solution,Testcase,ProblemSet
 from problem.serializers import ProblemsListSerializer,getProblemSerializer,ProblemSetSerializer,ProblemSetSerializerAllFields,SolutionsSerializerList,SolutionDetailSerializer
 from problem.utils import run_code,compile_code
 from django.core.files.base import ContentFile
+from django.conf import settings
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework.parsers import MultiPartParser,FormParser
 from rest_framework.permissions import IsAuthenticated
 from rest_framework_simplejwt.authentication import JWTAuthentication
-import os,zipfile,shutil,traceback
+import os,zipfile,shutil,traceback,uuid
 
 
 class ProblemsListAPIView(APIView):
@@ -232,15 +233,17 @@ class SubmitCodeAPIView(APIView):
             counter += 1
             try:
                 testcase.input_file.seek(0)
-                input_data = testcase.input_file.read().decode().strip()
+                input_file_path = testcase.input_file.path
+                print("--->>>>>>>>>>>>> in the submit api view",input_file_path)
                 testcase.output_file.seek(0)
                 expected_output = testcase.output_file.read().decode().strip()
-
-                run_result = run_code(lang, executable_path, input_data, temp_dir)
+                run_result = run_code(lang, executable_path, input_file_path, temp_dir)
                 if not run_result['success']:
                     solution.verdict = run_result['verdict']
                     solution.success = False
                     solution.save()
+                    if executable_path and os.path.exists(executable_path):
+                        os.remove(executable_path)
                     return Response({
                         'verdict': solution.verdict,
                         'success': False,
@@ -255,6 +258,8 @@ class SubmitCodeAPIView(APIView):
                     solution.verdict = f'Wrong Answer on testcase {counter}'
                     solution.success = False
                     solution.save()
+                    if executable_path and os.path.exists(executable_path):
+                        os.remove(executable_path)
                     return Response({
                         'verdict': solution.verdict,
                         'success': False,
@@ -268,6 +273,8 @@ class SubmitCodeAPIView(APIView):
                 solution.verdict = 'Internal Error'
                 solution.success = False
                 solution.save()
+                if executable_path and os.path.exists(executable_path):
+                        os.remove(executable_path)
                 return Response({
                     'verdict': f'{solution.verdict} : {str(e)}',
                     'success': False,
@@ -290,13 +297,14 @@ class SubmitCodeAPIView(APIView):
         solution.success = True
         solution.runtime = max_runtime
         solution.save()
+        if executable_path and os.path.exists(executable_path):
+            os.remove(executable_path)
         return Response({
             'verdict': 'Accepted',
             'runtime': max_runtime,
             'success': True,
             'submittedAt':solution.submittedAt,
         }, status=200)
-
 
 class RunCodeAPIView(APIView):
     authentication_classes = [JWTAuthentication]
@@ -308,10 +316,22 @@ class RunCodeAPIView(APIView):
         input_data = request.data.get('input_data', '')
 
         compile_result = compile_code(lang, code)
+        executable_path = compile_result.get('executable_path')
         if not compile_result['success']:
-            return Response(compile_result)
-
-        executable_path = compile_result['executable_path']
+            if executable_path and os.path.exists(executable_path):
+                os.remove(executable_path)
+            return Response(compile_result, status=400)
         temp_dir = compile_result['temp_dir']
-        run_result = run_code(lang, executable_path, input_data, temp_dir)
+        unique_id = uuid.uuid4().hex
+        input_file_path = os.path.join(temp_dir, f'{unique_id}_input.txt')
+        try:
+            with open(input_file_path, 'w') as f:
+                f.write(input_data)
+            run_result = run_code(lang, executable_path, input_file_path, temp_dir)
+        except Exception as e:
+            print(str(e))
+            return Response({'success': False, 'verdict': 'Internal Error', 'error': str(e),'output_data':str(e)}, status=500)
+        if executable_path and os.path.exists(executable_path):
+            os.remove(executable_path)
+        os.remove(input_file_path)
         return Response(run_result)

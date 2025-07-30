@@ -36,14 +36,12 @@ class SolutionsSerializerList(ModelSerializer):
     problem = BasicProblemSerializer()
     class Meta:
         model = Solution
-        fields = ['user','problem','verdict','success','id','submittedAt']
-
+        fields = ['user','problem','verdict','success','id','submittedAt','runtime']
 
 class SolutionDetailSerializer(ModelSerializer):
     class Meta:
         model = Solution
         fields = '__all__'
-
 
 
 

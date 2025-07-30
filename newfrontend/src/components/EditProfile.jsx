@@ -106,7 +106,7 @@ const EditProfile = () => {
     }
 
     try {
-      await axios.patch('http://localhost:8000/user/change-profile/', data, {
+      await axios.patch(paths.BASE+'user/change-profile/', data, {
         headers: {
           Authorization: `Bearer ${token}`,
           // Do not manually set 'Content-Type'; axios will do it correctly for FormData

@@ -3,7 +3,7 @@ import Navbar from './Navbar.jsx';
 import '../App.css'
 import { useEffect } from 'react';
 import axios from 'axios';
-
+import paths from '../paths.js';
 
 
 const Home = () => {
@@ -15,7 +15,7 @@ const Home = () => {
   useEffect(() => {
     const getVals = async () => {
       try {
-        const response = await axios.get('http://localhost:8000/home/');
+        const response = await axios.get(paths.BASE+'home/');
         setTotalProblems(response.data.problemCnt);
         setTotalUsers(response.data.userCnt);
         setTotalSolutions(response.data.solutionCnt);

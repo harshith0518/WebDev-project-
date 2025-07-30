@@ -3,7 +3,7 @@ import { useParams, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import Navbar from './Navbar';
 import { getValidAccessToken } from '../authUtils/getValidAccessToken';
-
+import paths from '../paths';
 
 
 const ProblemSetDetail = () => {
@@ -16,7 +16,7 @@ const ProblemSetDetail = () => {
       const token = await getValidAccessToken();
       if (!token) return navigate('/login');
       try {
-        const res = await axios.get(`http://localhost:8000/problems/problem-sets/${id}/`, {
+        const res = await axios.get(paths.BASE+`problems/problem-sets/${id}/`, {
           headers: { Authorization: `Bearer ${token}` }
         }); 
         setSetDetail(res.data);

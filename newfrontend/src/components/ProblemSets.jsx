@@ -23,7 +23,7 @@ const ProblemSets = () => {
         navigate(paths.LOGIN);
       }
       try {
-        const res = await axios.get('http://localhost:8000/user/is_staff/',{
+        const res = await axios.get(paths.BASE+'user/is_staff/',{
           headers: {Authorization:`Bearer ${token}`},
         });
         setIsStaff(res.data.is_staff);
@@ -43,7 +43,7 @@ const ProblemSets = () => {
         navigate(paths.LOGIN);
       }
       try {
-        const res = await axios.get('http://localhost:8000/problems/problem-sets/', {
+        const res = await axios.get(paths.BASE+'problems/problem-sets/', {
           headers: { Authorization: `Bearer ${token}` }
         });
         setSets(res.data);

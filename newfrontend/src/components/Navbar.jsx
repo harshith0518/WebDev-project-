@@ -19,7 +19,7 @@ export const Navbar = () => {
           setLoading(false);
           return;
         }
-        const response = await axios.get('http://localhost:8000/user/navbar/', {
+        const response = await axios.get(paths.BASE+'user/navbar/', {
           headers: {
             Authorization: `Bearer ${token}`,
           },
@@ -64,7 +64,7 @@ export const Navbar = () => {
                   <img
                     src={
                       user?.profile_pic
-                        ? `http://localhost:8000${user.profile_pic}`
+                        ? paths.BASE+`${user.profile_pic}`
                         : '/BatmanDefaultPic.webp'
                     }
                     alt="Profile"

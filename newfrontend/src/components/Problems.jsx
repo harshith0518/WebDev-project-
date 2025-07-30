@@ -52,7 +52,7 @@ const Problems = () => {
           navigate(paths.LOGIN);
           return;
         }
-        const response = await axios.get('http://localhost:8000/user/is_staff/', {
+        const response = await axios.get(paths.BASE+'user/is_staff/', {
           headers: {
             Authorization: `Bearer ${token}`,
           },
@@ -75,7 +75,7 @@ const Problems = () => {
           navigate(paths.LOGIN);
           return;
         }
-        const response = await axios.get('http://localhost:8000/problems/', {
+        const response = await axios.get(paths.BASE+'problems/', {
           headers: {
             Authorization: `Bearer ${token}`,
           },

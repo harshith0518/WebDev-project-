@@ -47,9 +47,9 @@ const AddProblem = () => {
     data.append('topics', selectedTopics.map(t => t.value).join(', '));
 
     try {
-      await axios.post('http://localhost:8000/problems/add-problem/', data, {
+      await axios.post(paths.BASE+'problems/add-problem/', data, {
         headers: {
-          Authorization: `Bearer ${token}`,
+          Authorization: `Bearer ${token}`, 
           'Content-Type': 'multipart/form-data',
         },
       });

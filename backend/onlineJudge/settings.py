@@ -30,7 +30,9 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 
 SECRET_KEY = os.environ.get("SECRET_KEY", "fallback-secret")
 DEBUG = os.environ.get("DEBUG", "False") == "True"
-ALLOWED_HOSTS = os.environ.get("DJANGO_ALLOWED_HOSTS", "").split(",")
+# ALLOWED_HOSTS = os.environ.get("DJANGO_ALLOWED_HOSTS", "").split(",")
+ALLOWED_HOSTS = ['localhost', '127.0.0.1']
+
 
 
 
@@ -55,6 +57,9 @@ INSTALLED_APPS = [
     'corsheaders',
     'rest_framework_simplejwt.token_blacklist',
 ]
+
+
+
 REST_FRAMEWORK = {
     "DEFAULT_AUTHENTICATION_CLASSES": [
         "rest_framework.authentication.SessionAuthentication",
@@ -120,23 +125,23 @@ WSGI_APPLICATION = 'onlineJudge.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/5.2/ref/settings/#databases
 
-# DATABASES = {
-#     'default': {
-#         'ENGINE': 'django.db.backends.sqlite3',
-#         'NAME': BASE_DIR / 'db.sqlite3',
-#     }
-# }
-
 DATABASES = {
     'default': {
-        'ENGINE' : 'django.db.backends.postgresql',
-        'NAME' : os.getenv('POSTGRES_DB'),
-        'USER' : os.getenv('POSTGRES_USER'),
-        'PASSWORD' : os.getenv('POSTGRES_PASSWORD'),
-        'HOST' : os.getenv('POSTGRES_HOST'),
-        'PORT' : os.getenv('POSTGRES_PORT'),
+        'ENGINE': 'django.db.backends.sqlite3',
+        'NAME': BASE_DIR / 'db.sqlite3',
     }
 }
+
+# DATABASES = {
+#     'default': {
+#         'ENGINE' : 'django.db.backends.postgresql',
+#         'NAME' : os.getenv('POSTGRES_DB'),
+#         'USER' : os.getenv('POSTGRES_USER'),
+#         'PASSWORD' : os.getenv('POSTGRES_PASSWORD'),
+#         'HOST' : os.getenv('POSTGRES_HOST'),
+#         'PORT' : os.getenv('POSTGRES_PORT'),
+#     }
+# }
 
 
 # Password validation

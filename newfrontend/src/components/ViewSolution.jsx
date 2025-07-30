@@ -17,7 +17,7 @@ const ViewSolution = () => {
   const fetchSolution = async () => {
     try {
       const token = await getValidAccessToken();  
-      const response = await axios.get(`http://localhost:8000/problems/solutions/solution/${id}/`, {
+      const response = await axios.get(paths.BASE+`problems/solutions/solution/${id}/`, {
         headers: {
           Authorization: `Bearer ${token}`,
         },

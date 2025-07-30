@@ -7,7 +7,6 @@ def compile_code(lang, code):
     try:
         temp_dir = os.path.join(settings.MEDIA_ROOT, 'Outputfiles')
         os.makedirs(temp_dir, exist_ok=True)
-
         unique_id = uuid.uuid4().hex
         filename = f'{unique_id}.{lang}'
         filepath = os.path.join(temp_dir, filename)
@@ -44,20 +43,14 @@ def compile_code(lang, code):
             'executable_path': os.path.join(temp_dir, unique_id),   #  for the docker
             'temp_dir': temp_dir
         }
-
     except Exception as e:
         return {'success': False, 'verdict': 'Internal Error', 'error': str(e)}
 
 
-def run_code(lang, executable_path, input_data, temp_dir):
+def run_code(lang, executable_path, input_file_path, temp_dir):
     try:
         unique_id = uuid.uuid4().hex
-        input_file_path = os.path.join(temp_dir, f'{unique_id}_input.txt')
         output_file_path = os.path.join(temp_dir, f'{unique_id}_output.txt')
-
-        with open(input_file_path, 'w') as f:
-            f.write(input_data)
-
         if lang == 'py':
             run_cmd = ['python', executable_path]
         else:
@@ -78,7 +71,7 @@ def run_code(lang, executable_path, input_data, temp_dir):
 
         with open(output_file_path, 'r') as f:
             output_data = f.read()
-
+        os.remove(output_file_path)
         if result.returncode != 0:
             return {
                 'success': False,
@@ -86,7 +79,6 @@ def run_code(lang, executable_path, input_data, temp_dir):
                 'verdict': 'Runtime Error',
                 'runtime': runtime
             }
-
         return {
             'success': True,
             'output_data': output_data,

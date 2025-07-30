@@ -14,7 +14,7 @@ const Logout = () => {
       try {
         if (refreshToken) {
           await axios.post(
-            'http://localhost:8000/api/logout/',
+            paths.BASE+'api/logout/',
             { refresh: refreshToken },
             {
               headers: {

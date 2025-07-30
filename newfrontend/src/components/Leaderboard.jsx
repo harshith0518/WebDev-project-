@@ -6,7 +6,6 @@ import paths from '../paths';
 import { useNavigate } from 'react-router-dom';
 
 
-
 function Leaderboard() {
   const navigate = useNavigate();
   const [searchTerm, setSearchTerm] = useState('');
@@ -21,7 +20,7 @@ function Leaderboard() {
           navigate(paths.LOGIN);
         }
 
-        const res = await axios.get('http://localhost:8000/user/get-all/', {
+        const res = await axios.get(paths.BASE+'user/get-all/', {
           headers: {
             Authorization: `Bearer ${token}`,
           },

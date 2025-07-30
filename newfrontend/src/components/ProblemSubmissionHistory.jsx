@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import { getValidAccessToken } from '../authUtils/getValidAccessToken';
 import { useNavigate } from 'react-router-dom';
+import paths from '../paths';
 
 function formatDateTime(datetimeStr) {
   if (!datetimeStr) return 'Invalid date';
@@ -18,7 +19,7 @@ const ProblemSubmissionHistory = ({ problemId, onClose }) => {
       try {
         const token = await getValidAccessToken();
         if (!token) return;'<int:id>/solutions/solution/mine/'
-        const res = await axios.get(`http://localhost:8000/problems/${problemId}/solutions/solution/mine`, {
+        const res = await axios.get(paths.BASE+`problems/${problemId}/solutions/solution/mine`, {
           headers: { Authorization: `Bearer ${token}` },
         });
         setSubmissions(res.data || []);

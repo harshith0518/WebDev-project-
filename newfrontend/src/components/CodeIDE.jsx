@@ -101,7 +101,7 @@ const CodeIDE = () => {
     }
     try {
       const runResponse = await axios.post(
-        'http://localhost:8000/problems/run/',
+        paths.BASE+'problems/run/',
         {
           language,
           code,

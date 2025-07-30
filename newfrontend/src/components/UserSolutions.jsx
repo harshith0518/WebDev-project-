@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import { getValidAccessToken } from '../authUtils/getValidAccessToken';
 import { useNavigate, useParams } from 'react-router-dom';
+import paths from '../paths';
 
 function formatDateTime(datetimeStr) {
   if (!datetimeStr) return 'Invalid date';
@@ -27,7 +28,7 @@ const UserSolutions = () => {
         const token = await getValidAccessToken();
         if (!token) return;
 
-        const res = await axios.get(`http://localhost:8000/problems/solutions/user-solutions/${id}`, {
+        const res = await axios.get(paths.BASE+`problems/solutions/user-solutions/${id}`, {
           headers: {
             Authorization: `Bearer ${token}`,
           },

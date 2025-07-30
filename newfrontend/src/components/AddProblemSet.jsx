@@ -4,6 +4,7 @@ import axios from 'axios';
 import Navbar from './Navbar';
 import { getValidAccessToken } from '../authUtils/getValidAccessToken';
 import customSelectStyles from '../customSelectStyles';
+import paths from '../paths';
 
 
 function AddProblemSet() {
@@ -17,7 +18,7 @@ function AddProblemSet() {
     const fetchProblems = async () => {
       const token = await getValidAccessToken();
       try {
-        const response = await axios.get('http://localhost:8000/problems/', {
+        const response = await axios.get(paths.BASE+'problems/', {
           headers: {
             Authorization: `Bearer ${token}`,
           },
@@ -48,7 +49,7 @@ function AddProblemSet() {
 
     try {
       await axios.post(
-        'http://localhost:8000/problems/problem-sets/add-set/',
+        paths.BASE+'problems/problem-sets/add-set/',
         payload,
         {
           headers: {
