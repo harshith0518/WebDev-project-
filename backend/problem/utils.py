@@ -87,6 +87,7 @@ def run_code(lang, executable_path, input_file_path, temp_dir):
         }
 
     except subprocess.TimeoutExpired:
+        os.remove(output_file_path)
         return {
             'success': False,
             'output_data': '',
@@ -94,6 +95,7 @@ def run_code(lang, executable_path, input_file_path, temp_dir):
             'runtime': 2.0
         }
     except Exception as e:
+        os.remove(output_file_path)
         return {
             'success': False,
             'output_data': '',
