@@ -63,9 +63,7 @@ export const Navbar = () => {
                 <span className="flex items-center gap-3 text-xl text-yellow-300">
                   <img
                     src={
-                      user?.profile_pic
-                        ? paths.BASE+`${user.profile_pic}`
-                        : '/BatmanDefaultPic.webp'
+                      user.profile_pic || '/BatmanDefaultPic.webp'
                     }
                     alt="Profile"
                     className="h-8 w-8 rounded-full object-cover border-2 border-yellow-400 shadow"

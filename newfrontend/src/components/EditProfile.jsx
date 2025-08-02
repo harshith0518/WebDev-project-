@@ -1,11 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { getValidAccessToken } from '../authUtils/getValidAccessToken';
-import { useNavigate, useParams } from 'react-router-dom';
+import { useLocation, useNavigate, useParams } from 'react-router-dom';
 import Navbar from './Navbar';
 import paths from '../paths';
 
 const EditProfile = () => {
+  const location = useLocation();
   const { id } = useParams();
   const navigate = useNavigate();
 
@@ -36,7 +37,7 @@ const EditProfile = () => {
         if (data.profile_pic) {
           const fullUrl = data.profile_pic.startsWith('http')
             ? data.profile_pic
-            : `http://localhost:8000${data.profile_pic}`;
+            : `BatmanDefaultPic.webp`;
           setPreviewPic(fullUrl);
         }
       } catch (error) {
@@ -83,7 +84,7 @@ const EditProfile = () => {
     e.preventDefault();
     const token = await getValidAccessToken();
     if (!token) {
-      localStorage.setItem('fall_back_page', paths.EDITPROFILE);
+      localStorage.setItem('fall_back_page', `/profile/${id}/edit`);
       navigate(paths.LOGIN);
       return;
     }
@@ -106,7 +107,7 @@ const EditProfile = () => {
     }
 
     try {
-      await axios.patch(paths.BASE+'user/change-profile/', data, {
+      await axios.patch('http://localhost:8000/user/change-profile/', data, {
         headers: {
           Authorization: `Bearer ${token}`,
           // Do not manually set 'Content-Type'; axios will do it correctly for FormData
@@ -179,7 +180,7 @@ const EditProfile = () => {
             </div>
 
             <div>
-              <label className="text-sm font-semibold text-yellow-300">Profile Picture</label>
+              <label className="text-sm font-semibold text-yellow-300">Profile Picture <span className="text-red-400">(png,jpeg,jpg,webp)</span></label>
               <div
                 onDrop={handleDrop}
                 onDragOver={(e) => e.preventDefault()}
@@ -211,6 +212,7 @@ const EditProfile = () => {
             >
               Save Changes
             </button>
+            
           </form>
         </div>
       </div>

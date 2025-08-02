@@ -291,13 +291,12 @@ class SubmitCodeAPIView(APIView):
                 request.user.Score += 10
                 request.user.Hard_solved += 1
             request.user.save()
-
         solution.verdict = 'Accepted'
         solution.success = True
         solution.runtime = max_runtime
         solution.save()
-        if executable_path and os.path.exists(executable_path+".exe"):
-            os.remove(executable_path+".exe")  # For localhost
+        if executable_path and os.path.exists(executable_path):
+            os.remove(executable_path)  # For localhost
             # os.remove(executable_path)  # For docker
         return Response({
             'verdict': 'Accepted',
@@ -317,10 +316,15 @@ class RunCodeAPIView(APIView):
         compile_result = compile_code(lang, code)
         executable_path = compile_result.get('executable_path')
         if not compile_result['success']:
-            if executable_path and os.path.exists(executable_path+".exe"):
-                os.remove(executable_path+".exe")  # For localhost
+            if executable_path and os.path.exists(executable_path):
+                os.remove(executable_path)  # For localhost
                 # os.remove(executable_path)  # For docker
-        temp_dir = compile_result['temp_dir']
+            return Response({
+                'success':False,
+                'verdict':"Compilation Error",
+                'output_data':compile_result.get('output_data')
+            },status=500)
+        temp_dir = compile_result.get('temp_dir')
         unique_id = uuid.uuid4().hex
         input_file_path = os.path.join(temp_dir, f'{unique_id}_input.txt')
         try:
@@ -329,9 +333,9 @@ class RunCodeAPIView(APIView):
             run_result = run_code(lang, executable_path, input_file_path, temp_dir)
         except Exception as e:
             print(str(e))
-            return Response({'success': False, 'verdict': 'Internal Error', 'error': str(e),'output_data':str(e)}, status=500)
-        if executable_path and os.path.exists(executable_path+".exe"):
-            os.remove(executable_path+".exe")  # For localhost
+            return Response({'success': False, 'verdict': 'Runtime Error','output_data':str(e)}, status=500)
+        if executable_path and os.path.exists(executable_path):
+            os.remove(executable_path)  # For localhost
             # os.remove(executable_path)  # For docker
         os.remove(input_file_path)
         return Response(run_result)

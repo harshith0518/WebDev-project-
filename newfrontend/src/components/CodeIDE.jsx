@@ -91,11 +91,11 @@ const CodeIDE = () => {
   }, [monaco]);
 
   const handleRunCode = async (e) => {
-    if (e) e.preventDefault();
+    e.preventDefault();
     setIsRunning(true);
     const token = await getValidAccessToken();
     if (!token) {
-      localStorage.setItem('fall_back_page', paths.CODEIDE);
+      localStorage.setItem('fall_back_page', location.pathname);
       navigate(paths.LOGIN);
       return;
     }
@@ -119,8 +119,16 @@ const CodeIDE = () => {
       setRuntime(runResponse.data.runtime ?? '---');
     } catch (err) {
       console.error("Execution error:", err);
-      setVerdict("Error occurred");
-      setRuntime("N/A");
+      if (err.response) {
+        const data = err.response.data;
+        console.log(data);
+        setOutput(data.output_data ?? '');
+        setVerdict(data.verdict ?? 'Error occurred');
+        setRuntime(data.runtime ?? 'N/A');
+      } else {
+        setVerdict("Unknown error occurred");
+        setRuntime("N/A");
+      }
     } finally {
       setIsRunning(false);
     }

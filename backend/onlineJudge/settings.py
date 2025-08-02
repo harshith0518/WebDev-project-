@@ -29,7 +29,8 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # ALLOWED_HOSTS = []
 
 SECRET_KEY = os.environ.get("SECRET_KEY", "fallback-secret")
-DEBUG = os.environ.get("DEBUG", "False") == "True"
+# DEBUG = os.environ.get("DEBUG", "False") == "True"
+DEBUG = True
 # ALLOWED_HOSTS = os.environ.get("DJANGO_ALLOWED_HOSTS", "").split(",")
 ALLOWED_HOSTS = ['localhost', '127.0.0.1']
 

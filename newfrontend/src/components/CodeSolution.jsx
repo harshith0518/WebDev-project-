@@ -147,8 +147,16 @@ const CodeSolution = () => {
       setRuntime(runResponse.data.runtime ?? '---');
     } catch (err) {
       console.error("Execution error:", err);
-      setVerdict("Error occurred");
-      setRuntime("N/A");
+      if (err.response) {
+        const data = err.response.data;
+        console.log(data);
+        setOutput(data.output_data ?? '');
+        setVerdict(data.verdict ?? 'Error occurred');
+        setRuntime(data.runtime ?? 'N/A');
+      } else {
+        setVerdict("Unknown error occurred");
+        setRuntime("N/A");
+      }
     } finally {
       setIsRunning(false);
     }

@@ -35,20 +35,22 @@ def compile_code(lang, code):
         if result.returncode != 0:
             with open(output_file_path, 'r') as f:
                 output_data = f.read()
+            output_data = output_data.replace(unique_id,'CODE')
+            if os.path.exists(output_file_path):
+                os.remove(output_file_path)
             return {'success': False, 'output_data': output_data, 'verdict': 'Compilation Error'}
         if os.path.exists(output_file_path):
             os.remove(output_file_path)
         return {
             'success': True,
-            # 'executable_path': os.path.join(temp_dir, unique_id + '.exe'),  for the localhost
-            'executable_path': os.path.join(temp_dir, unique_id),   #  for the docker
+            'executable_path': os.path.join(temp_dir, unique_id + '.exe'),  # for the localhost
+            # 'executable_path': os.path.join(temp_dir, unique_id),   #  for the docker
             'temp_dir': temp_dir
         }
     except Exception as e:
         if os.path.exists(output_file_path):
             os.remove(output_file_path)
-        return {'success': False, 'verdict': 'Internal Error', 'error': str(e)}
-
+        return {'success': False, 'verdict': 'Internal Error', 'output_data': str(e)}
 
 def run_code(lang, executable_path, input_file_path, temp_dir):
     try:
@@ -95,7 +97,7 @@ def run_code(lang, executable_path, input_file_path, temp_dir):
             'success': False,
             'output_data': '',
             'verdict': 'Time Limit Exceeded',
-            'runtime': 2.0
+            'runtime': 2.001
         }
     except Exception as e:
         os.remove(output_file_path)

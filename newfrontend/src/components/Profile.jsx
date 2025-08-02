@@ -28,6 +28,7 @@ const UserProfile = () => {
           },
         });
         setViewUser(response.data);
+        console.log("Fetched user profile:", response.data);
       } catch (err) {
         console.error("Failed to fetch user profile:", err);
       }
@@ -71,11 +72,13 @@ const UserProfile = () => {
           {activeTab === 'profile' ? (
             <>
               <div className="flex flex-col md:flex-row items-center md:items-start gap-8">
-                <img
-                  src={viewUser.profile_pic?`http://localhost:8000${viewUser.profile_pic}`:'BatmanDefaultPic.webp'}
-                  alt="Profile"
-                  className="w-36 h-36 rounded-full border-4 border-yellow-400 shadow-xl"
-                />
+                <div className="w-36 h-36 rounded-full overflow-hidden border-4 border-yellow-400 shadow-xl">
+                  <img
+                    src={viewUser.profile_pic || '/BatmanDefaultPic.webp'}
+                    alt="Profile"
+                    className="w-full h-full object-cover object-center"
+                  />
+                </div>
                 <div className="flex-1 space-y-2">
                   <h1 className="text-4xl font-extrabold text-yellow-400">{viewUser.username}</h1>
                   <p className="text-indigo-300 text-sm">{viewUser.email}</p>
