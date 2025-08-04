@@ -1,5 +1,6 @@
 // src/utils/authUtils.js
 import axios from "axios";
+import paths from "../paths";
 
 export const getValidAccessToken = async () => {
   const access_token = localStorage.getItem('access_token');
@@ -9,7 +10,7 @@ export const getValidAccessToken = async () => {
   }
 
   try {
-    await axios.get('http://localhost:8000/api/is-auth/', {
+    await axios.get(paths.BASE+'api/is-auth/', {
       headers: {
         'Authorization': `Bearer ${access_token}`,
         'Content-Type': 'application/json'
@@ -19,7 +20,7 @@ export const getValidAccessToken = async () => {
   } catch (err) {
     try {
       const res = await axios.post(
-        'http://localhost:8000/api/token/refresh/',
+        paths.BASE+'api/token/refresh/',
         { refresh: refresh_token },
         { headers: { 'Content-Type': 'application/json' } }
       );

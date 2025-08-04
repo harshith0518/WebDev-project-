@@ -30,7 +30,7 @@ const Login = () => {
     const user_id = response.data.user_id;
     localStorage.setItem("access_token", access);
     localStorage.setItem("refresh_token", refresh);
-    localStorage.setItem("userId",user_id)
+    localStorage.setItem("userId",user_id);
     // console.log(user_id,'log in successful')
     const fallBack = localStorage.getItem('fall_back_page');
     navigate(fallBack?fallBack:paths.HOME);
