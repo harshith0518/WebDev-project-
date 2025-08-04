@@ -113,7 +113,6 @@ class AddProblemAPIView(APIView):
                 if os.path.isdir(folder_path):
                     input_path = os.path.join(folder_path, 'input.txt')
                     output_path = os.path.join(folder_path, 'output.txt')
-
                     if os.path.exists(input_path) and os.path.exists(output_path):
                         with open(input_path, 'rb') as inp_file, open(output_path, 'rb') as out_file:
                             Testcase.objects.create(

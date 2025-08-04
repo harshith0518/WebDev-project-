@@ -5,9 +5,10 @@ import Navbar from './Navbar';
 import { getValidAccessToken } from '../authUtils/getValidAccessToken';
 import customSelectStyles from '../customSelectStyles';
 import paths from '../paths';
-
+import { useNavigate } from 'react-router-dom';
 
 function AddProblemSet() {
+  const navigate = useNavigate();
   const [problemSetTitle, setProblemSetTitle] = useState('');
   const [difficultyLevel, setDifficultyLevel] = useState('Easy');
   const [topics, setTopics] = useState('');
@@ -64,6 +65,7 @@ function AddProblemSet() {
       setDifficultyLevel('Easy');
       setTopics('');
       setSelectedProblems([]);
+      navigate(paths.PROBLEMSETS);
     } catch (err) {
       console.error('Error creating problem set:', err);
     }

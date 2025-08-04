@@ -13,6 +13,9 @@ https://docs.djangoproject.com/en/5.2/ref/settings/
 from pathlib import Path
 from datetime import timedelta 
 import os
+from dotenv import load_dotenv
+load_dotenv()
+
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
@@ -29,10 +32,13 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # ALLOWED_HOSTS = []
 
 SECRET_KEY = os.environ.get("SECRET_KEY", "fallback-secret")
-# DEBUG = os.environ.get("DEBUG", "False") == "True"
-DEBUG = True
-# ALLOWED_HOSTS = os.environ.get("DJANGO_ALLOWED_HOSTS", "").split(",")
-ALLOWED_HOSTS = ['localhost', '127.0.0.1']
+DEBUG = os.environ.get("DEBUG", "False") == "True"
+# DEBUG = True
+
+# ALLOWED_HOSTS = ['localhost', '127.0.0.1']
+ALLOWED_HOSTS = os.environ.get("DJANGO_ALLOWED_HOSTS", "").split(",")
+ALLOWED_HOSTS = ['*']
+# ALLOWED_HOSTS = ['localhost', '127.0.0.1']
 
 
 
@@ -126,21 +132,32 @@ WSGI_APPLICATION = 'onlineJudge.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/5.2/ref/settings/#databases
 
+# DATABASES = {
+#     'default': {
+#         'ENGINE': 'django.db.backends.sqlite3',
+#         'NAME': BASE_DIR / 'db.sqlite3',
+#     }
+# }
+
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+        'ENGINE' : 'django.db.backends.postgresql',
+        'NAME' : os.getenv('POSTGRES_DB'),
+        'USER' : os.getenv('POSTGRES_USER'),
+        'PASSWORD' : os.getenv('POSTGRES_PASSWORD'),
+        'HOST' : os.getenv('POSTGRES_HOST'),
+        'PORT' : os.getenv('POSTGRES_PORT'),
     }
 }
 
 # DATABASES = {
 #     'default': {
 #         'ENGINE' : 'django.db.backends.postgresql',
-#         'NAME' : os.getenv('POSTGRES_DB'),
-#         'USER' : os.getenv('POSTGRES_USER'),
-#         'PASSWORD' : os.getenv('POSTGRES_PASSWORD'),
-#         'HOST' : os.getenv('POSTGRES_HOST'),
-#         'PORT' : os.getenv('POSTGRES_PORT'),
+#         'NAME' : 'postgres',
+#         'USER' : 'postgres',
+#         'PASSWORD' : 'postgres5@Ss',
+#         'HOST' : 'host.docker.internal',
+#         'PORT' : 5432,
 #     }
 # }
 
