@@ -36,8 +36,6 @@ STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 ALLOWED_HOSTS = os.environ.get("DJANGO_ALLOWED_HOSTS", "").split(",")
 
 
-
-
 # Application definition
 
 #################################################################
@@ -74,7 +72,8 @@ REST_FRAMEWORK = {
 }
 
 CORS_ALLOWED_ORIGINS = [
-    "http://localhost:5173",
+    # "http://localhost:5173",
+    "https://web-dev-project-sandy.vercel.app",
 ]
 
 
