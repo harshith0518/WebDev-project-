@@ -15,7 +15,7 @@ const paths = {
   ADDPROBLEM: '/problems/add-problem',
   PROBLEMSETS: '/problem-sets',
   ADDPROBLEMSETS: '/problem-sets/add-set',
-  BASE : 'http://43.204.212.80:8000',
+  BASE : String(import.meta.env.VITE_API_BASE_URL)
 };
 
 export default paths;
