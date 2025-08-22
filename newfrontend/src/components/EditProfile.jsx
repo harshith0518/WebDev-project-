@@ -180,7 +180,7 @@ const EditProfile = () => {
             </div>
 
             <div>
-              <label className="text-sm font-semibold text-yellow-300">Profile Picture <span className="text-red-400">(png,jpeg,jpg,webp)</span></label>
+              <label className="text-sm font-semibold text-yellow-300">Profile Picture <span className="text-red-400"> (png,jpeg,jpg,webp ONLY!!)</span></label>
               <div
                 onDrop={handleDrop}
                 onDragOver={(e) => e.preventDefault()}

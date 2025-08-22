@@ -1,9 +1,9 @@
 from django.urls import path
-from home.views import homeRequirementsAPIView
+from home.views import upload_file_view
 
 
 urlpatterns = [
-    path('',homeRequirementsAPIView.as_view(),name = 'home'),
+    path('',upload_file_view,name = 'home'),
 ]
 
 

@@ -52,7 +52,7 @@ def compile_code(lang, code):
             os.remove(output_file_path)
         return {'success': False, 'verdict': 'Internal Error', 'output_data': str(e)}
 
-def run_code(lang, executable_path, input_file_path, temp_dir):
+def run_code(lang, executable_path, input_file_path, temp_dir,input_data=None):
     try:
         unique_id = uuid.uuid4().hex
         output_file_path = os.path.join(temp_dir, f'{unique_id}_output.txt')
@@ -62,6 +62,11 @@ def run_code(lang, executable_path, input_file_path, temp_dir):
             run_cmd = [executable_path]
 
         start_time = time.time()
+        if input_file_path is None:
+            input_file_path = os.path.join(temp_dir, f'{unique_id}_input.txt')
+            print("<----->",input_data,"<------------>")
+            with open(input_file_path, 'w') as f:
+                f.write(input_data if input_data else '')
         with open(input_file_path, 'r') as input_file, open(output_file_path, 'w') as output_file:
             result = subprocess.run(
                 run_cmd,
@@ -77,6 +82,8 @@ def run_code(lang, executable_path, input_file_path, temp_dir):
         with open(output_file_path, 'r') as f:
             output_data = f.read()
         os.remove(output_file_path)
+        print(f"output_data: {output_data.strip()}")
+        print(f"Execution completed in {runtime} seconds with return code {result.returncode}")
         if result.returncode != 0:
             return {
                 'success': False,

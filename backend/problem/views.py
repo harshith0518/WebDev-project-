@@ -113,7 +113,6 @@ class AddProblemAPIView(APIView):
                 if os.path.isdir(folder_path):
                     input_path = os.path.join(folder_path, 'input.txt')
                     output_path = os.path.join(folder_path, 'output.txt')
-
                     if os.path.exists(input_path) and os.path.exists(output_path):
                         with open(input_path, 'rb') as inp_file, open(output_path, 'rb') as out_file:
                             Testcase.objects.create(
@@ -233,16 +232,19 @@ class SubmitCodeAPIView(APIView):
             counter += 1
             try:
                 testcase.input_file.seek(0)
-                input_file_path = testcase.input_file.path
                 testcase.output_file.seek(0)
-                expected_output = testcase.output_file.read().decode().strip()
-                run_result = run_code(lang, executable_path, input_file_path, temp_dir)
+                with testcase.input_file.open("rb") as f:
+                    input_data = f.read().decode()
+                expected_output = testcase.output_file.open("rb").read().decode().strip()
+                print(f"1.Running testcase {counter} with input: {input_data.strip()} and expected output: {expected_output.strip()}")
+                run_result = run_code(lang, executable_path, input_file_path = None, temp_dir=temp_dir, input_data=input_data)
                 if not run_result['success']:
                     solution.verdict = run_result['verdict']
                     solution.success = False
                     solution.save()
                     if executable_path and os.path.exists(executable_path):
                         os.remove(executable_path)
+                    print(f"2.Testcase {counter} failed with verdict: {solution.verdict}")
                     return Response({
                         'verdict': solution.verdict,
                         'success': False,
@@ -259,6 +261,7 @@ class SubmitCodeAPIView(APIView):
                     solution.save()
                     if executable_path and os.path.exists(executable_path):
                         os.remove(executable_path)
+                    print(f"3.Testcase {counter} failed with verdict: {solution.verdict}")
                     return Response({
                         'verdict': solution.verdict,
                         'success': False,
@@ -298,6 +301,7 @@ class SubmitCodeAPIView(APIView):
         if executable_path and os.path.exists(executable_path):
             os.remove(executable_path)  # For localhost
             # os.remove(executable_path)  # For docker
+        print(f"All testcases passed for problem {problem.id}. Verdict: {solution.verdict}, Runtime: {max_runtime}s")
         return Response({
             'verdict': 'Accepted',
             'runtime': max_runtime,
@@ -316,9 +320,8 @@ class RunCodeAPIView(APIView):
         compile_result = compile_code(lang, code)
         executable_path = compile_result.get('executable_path')
         if not compile_result['success']:
-            if executable_path and os.path.exists(executable_path):
-                os.remove(executable_path)  # For localhost
-                # os.remove(executable_path)  # For docker
+            # if executable_path and os.path.exists(executable_path):
+                # os.remove(executable_path)  # For localhost
             return Response({
                 'success':False,
                 'verdict':"Compilation Error",

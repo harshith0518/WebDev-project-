@@ -13,6 +13,8 @@ https://docs.djangoproject.com/en/5.2/ref/settings/
 from pathlib import Path
 from datetime import timedelta 
 import os
+from dotenv import load_dotenv
+load_dotenv()
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
@@ -21,24 +23,42 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/5.2/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-# SECRET_KEY = 'django-insecure-v)p44wr9osml$i06=en7$3-0$t77c&ps!didj4=ua!qfgbj7+&'
 
-# # SECURITY WARNING: don't run with debug turned on in production!
-# DEBUG = True
+SECRET_KEY = os.environ["SECRET_KEY"]
+DEBUG = os.environ.get("DEBUG", "False") == "True"
 
-# ALLOWED_HOSTS = []
-
-SECRET_KEY = os.environ.get("SECRET_KEY", "fallback-secret")
-# DEBUG = os.environ.get("DEBUG", "False") == "True"
-DEBUG = True
-# ALLOWED_HOSTS = os.environ.get("DJANGO_ALLOWED_HOSTS", "").split(",")
-ALLOWED_HOSTS = ['localhost', '127.0.0.1']
-
-
-
+if os.environ.get("USE_S3", "False") == "True":
+    AWS_ACCESS_KEY_ID = os.environ.get("AWS_ACCESS_KEY_ID", "your-access-key")
+    AWS_SECRET_ACCESS_KEY = os.environ.get("AWS_SECRET_ACCESS_KEY", "your-secret-key")
+    AWS_STORAGE_BUCKET_NAME = os.environ.get("AWS_STORAGE_BUCKET_NAME", "your-bucket-name")
+    AWS_S3_REGION_NAME = os.environ.get("AWS_S3_REGION_NAME", "your-region")
+    AWS_QUERYSTRING_AUTH = os.environ.get("AWS_QUERYSTRING_AUTH", "False") == "True"
+    AWS_S3_FILE_OVERWRITE = os.environ.get("AWS_QUERYSTRING_AUTH", "False") == "True"
+    AWS_S3_OBJECT_PARAMETERS = {
+        'CacheControl': 'max-age=86400',
+    }
+    AWS_S3_CUSTOM_DOMAIN = f"{AWS_STORAGE_BUCKET_NAME}.s3.amazonaws.com"
+    
+    STATIC_URL = f"https://{AWS_S3_CUSTOM_DOMAIN}/static/"
+    MEDIA_URL = f"https://{AWS_S3_CUSTOM_DOMAIN}/media/"
+    STORAGES = {
+        "default": {
+            "BACKEND": "storages.backends.s3boto3.S3Boto3Storage",
+            "OPTIONS": {"location": "media"},
+        },
+        "staticfiles": {
+            "BACKEND": "storages.backends.s3boto3.S3StaticStorage",
+            "OPTIONS": {"location": "static"},
+        },
+    }
+else:
+    MEDIA_URL = '/media/'
+    MEDIA_ROOT = BASE_DIR / 'media'
+ALLOWED_HOSTS = os.environ.get("DJANGO_ALLOWED_HOSTS", "").split(",")
+# STATIC_URL = f"https://{AWS_STORAGE_BUCKET_NAME}.s3.{AWS_S3_REGION_NAME}.amazonaws.com/static/"
 
 # Application definition
-
+# DEBUG=True
 #################################################################
 INSTALLED_APPS = [
     'django.contrib.admin',
@@ -56,6 +76,7 @@ INSTALLED_APPS = [
     'rest_framework',
     'rest_framework_simplejwt',
     'corsheaders',
+    'storages',
     'rest_framework_simplejwt.token_blacklist',
 ]
 
@@ -92,11 +113,10 @@ MIDDLEWARE = [
 ]
 
 AUTH_USER_MODEL = 'user.CustomUser'
-MEDIA_URL = '/media/'
-MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+
 SIMPLE_JWT = {
-    'ACCESS_TOKEN_LIFETIME': timedelta(minutes=20),
-    'REFRESH_TOKEN_LIFETIME': timedelta(minutes=30),
+    'ACCESS_TOKEN_LIFETIME': timedelta(days=int(os.environ.get('JWT_ACCESS_TOKEN_LIFETIME','1'))),
+    'REFRESH_TOKEN_LIFETIME': timedelta(days=int(os.environ.get('JWT_REFRESH_TOKEN_LIFETIME','2'))),
     'BLACKLIST_AFTER_ROTATION': True,
     'ROTATE_REFRESH_TOKENS': True,
 }
@@ -126,23 +146,23 @@ WSGI_APPLICATION = 'onlineJudge.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/5.2/ref/settings/#databases
 
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
-    }
-}
-
 # DATABASES = {
 #     'default': {
-#         'ENGINE' : 'django.db.backends.postgresql',
-#         'NAME' : os.getenv('POSTGRES_DB'),
-#         'USER' : os.getenv('POSTGRES_USER'),
-#         'PASSWORD' : os.getenv('POSTGRES_PASSWORD'),
-#         'HOST' : os.getenv('POSTGRES_HOST'),
-#         'PORT' : os.getenv('POSTGRES_PORT'),
+#         'ENGINE': 'django.db.backends.sqlite3',
+#         'NAME': BASE_DIR / 'db.sqlite3',
 #     }
 # }
+
+DATABASES = {
+    'default': {
+        'ENGINE' : 'django.db.backends.postgresql',
+        'NAME' : os.environ.get('POSTGRES_DB'),
+        'USER' : os.environ.get('POSTGRES_USER'),
+        'PASSWORD' : os.environ.get('POSTGRES_PASSWORD'),
+        'HOST' : os.environ.get('POSTGRES_HOST'),
+        'PORT' : os.environ.get('POSTGRES_PORT'),
+    }
+}
 
 
 # Password validation
@@ -179,8 +199,8 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/5.2/howto/static-files/
 
-STATIC_URL = 'static/'
-
+STATIC_URL = '/static/'
+STATIC_ROOT = os.path.join(BASE_DIR , 'staticfiles')
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.2/ref/settings/#default-auto-field
 

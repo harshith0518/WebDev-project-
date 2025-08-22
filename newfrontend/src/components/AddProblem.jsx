@@ -6,7 +6,7 @@ import Navbar from './Navbar';
 import Select from 'react-select';
 import topicOptions from '../TopicOptions'
 import customSelectStyles from '../customSelectStyles';
-
+import paths from '../paths';
 
 
 const AddProblem = () => {
@@ -54,10 +54,11 @@ const AddProblem = () => {
         },
       });
       alert('Problem added successfully!');
+      navigate(paths.PROBLEMS);
     } catch (err) {
       console.error(err);
       alert('Error uploading problem');
-    }
+    } 
   };
 
   return (
@@ -211,6 +212,7 @@ const AddProblem = () => {
 
             <button
               type="submit"
+              onClick={handleSubmit}
               className="w-full py-3 bg-indigo-600 hover:bg-yellow-400 text-white hover:text-black font-bold rounded-md transition duration-300"
             >
               Upload Problem

@@ -6,7 +6,7 @@ from .manager import UserManager
 
 class CustomUser(AbstractUser):
     email = models.EmailField(max_length=100, unique=True)
-    username = models.CharField(max_length=20, blank=True, null=True)
+    username = models.CharField(max_length=20, blank=True, null=True,default='')
     first_name = models.CharField(max_length=20, blank=True)
     last_name = models.CharField(max_length=20, blank=True)
     Score = models.IntegerField(default=0)
