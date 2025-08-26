@@ -232,19 +232,16 @@ class SubmitCodeAPIView(APIView):
             counter += 1
             try:
                 testcase.input_file.seek(0)
+                input_file_path = testcase.input_file.path
                 testcase.output_file.seek(0)
-                with testcase.input_file.open("rb") as f:
-                    input_data = f.read().decode()
-                expected_output = testcase.output_file.open("rb").read().decode().strip()
-                print(f"1.Running testcase {counter} with input: {input_data.strip()} and expected output: {expected_output.strip()}")
-                run_result = run_code(lang, executable_path, input_file_path = None, temp_dir=temp_dir, input_data=input_data)
+                expected_output = testcase.output_file.read().decode().strip()
+                run_result = run_code(lang, executable_path, input_file_path, temp_dir)
                 if not run_result['success']:
                     solution.verdict = run_result['verdict']
                     solution.success = False
                     solution.save()
                     if executable_path and os.path.exists(executable_path):
                         os.remove(executable_path)
-                    print(f"2.Testcase {counter} failed with verdict: {solution.verdict}")
                     return Response({
                         'verdict': solution.verdict,
                         'success': False,
@@ -261,7 +258,6 @@ class SubmitCodeAPIView(APIView):
                     solution.save()
                     if executable_path and os.path.exists(executable_path):
                         os.remove(executable_path)
-                    print(f"3.Testcase {counter} failed with verdict: {solution.verdict}")
                     return Response({
                         'verdict': solution.verdict,
                         'success': False,
@@ -301,7 +297,6 @@ class SubmitCodeAPIView(APIView):
         if executable_path and os.path.exists(executable_path):
             os.remove(executable_path)  # For localhost
             # os.remove(executable_path)  # For docker
-        print(f"All testcases passed for problem {problem.id}. Verdict: {solution.verdict}, Runtime: {max_runtime}s")
         return Response({
             'verdict': 'Accepted',
             'runtime': max_runtime,
@@ -312,7 +307,6 @@ class SubmitCodeAPIView(APIView):
 class RunCodeAPIView(APIView):
     authentication_classes = [JWTAuthentication]
     permission_classes = [IsAuthenticated]
-
     def post(self, request):
         lang = request.data.get('language')
         code = request.data.get('code')
@@ -320,8 +314,8 @@ class RunCodeAPIView(APIView):
         compile_result = compile_code(lang, code)
         executable_path = compile_result.get('executable_path')
         if not compile_result['success']:
-            # if executable_path and os.path.exists(executable_path):
-                # os.remove(executable_path)  # For localhost
+            if executable_path and os.path.exists(executable_path):
+                os.remove(executable_path)  # For localhost
             return Response({
                 'success':False,
                 'verdict':"Compilation Error",

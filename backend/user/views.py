@@ -6,6 +6,8 @@ from rest_framework_simplejwt.authentication import JWTAuthentication
 from user.serializers import UserSerializer,forNavbarSerializer,ChangeProfileSerializer
 from django.contrib.auth.models import User
 from django.contrib.auth import get_user_model
+from django.core.files.base import ContentFile
+from django.core.files.storage import default_storage
 # Create your views here.
 User = get_user_model()
 
@@ -97,23 +99,23 @@ class ChangeProfileAPIView(APIView):
 
             if os.path.exists(old_path):
                 print("-----------> Old profile pic found at:", old_path)
-                os.remove(old_path)
+                # os.remove(old_path)
                 print("-----------> Old profile pic deleted")
             else:
                 print("-----------> Old path does not exist on filesystem")
 
             # Rename new file to user_id_profilepic.ext
-            ext = os.path.splitext(profile_pic.name)[1]  # e.g. '.png'
-            new_name = f"{user.id}_profilepic{ext}"
-            profile_pic.name = new_name
-            print("-----------> Renaming new profile pic to:", new_name)
+            # ext = os.path.splitext(profile_pic.name)[1]  # e.g. '.png'
+            # new_name = f"{user.id}_profilepic{ext}"
+            # profile_pic.name = new_name
+            # print("-----------> Renaming new profile pic to:", new_name)
         else:
             if profile_pic:
                 print("-----------> No old pic to delete (Default Batman still set)")
-                ext = os.path.splitext(profile_pic.name)[1]  # e.g. '.png'
-                new_name = f"{user.id}_profilepic{ext}"
-                profile_pic.name = new_name
-                print("-----------> Renaming new profile pic to:", new_name)
+                # ext = os.path.splitext(profile_pic.name)[1]  # e.g. '.png'
+                # new_name = f"{user.id}_profilepic{ext}"
+                # profile_pic.name = new_name
+                # print("-----------> Renaming new profile pic to:", new_name)
             else:
                 print("-----------> Skipping file replacement since no new file uploaded")
 

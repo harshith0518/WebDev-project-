@@ -117,6 +117,7 @@ const CodeIDE = () => {
       setOutput(runResponse.data.output_data ?? '');
       setVerdict(runResponse.data.verdict ?? '---');
       setRuntime(runResponse.data.runtime ?? '---');
+      console.log("Run response:", runResponse.data);
     } catch (err) {
       console.error("Execution error:", err);
       if (err.response) {

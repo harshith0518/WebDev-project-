@@ -6,12 +6,12 @@ using namespace std;
 int main()
 {
     string s;
-    cin>>s;
+    getline(cin,s);
     string t = "";
     int num;
     for(char c:s) 
     {
-        if(c == ' ') cout<<t<<'/',t = "";
+        if(c == ' ') t = "";
         else t+=c;
     }
     cout<<"This is sample output for test case "<<t<<'\n';
